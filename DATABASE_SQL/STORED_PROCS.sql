@@ -3,7 +3,7 @@ USE Accounting
 GO
 CREATE OR ALTER PROC usp_ViewPersonAccounts
 	@personID int,
-	@netBalance decimal(10, 2) out,
+	@netBalance decimal(19, 4) out,
 	@accountCount int out
 AS
 BEGIN
@@ -13,25 +13,29 @@ BEGIN
 		SELECT 
 			A.AccountID [AccountID]
 			, NickName [NickName]
-			, Type [Type]
+			, AT.Name [Type]
 			, Status [Status]
 		FROM 
 			Persons P INNER JOIN Accounts A ON P.PersonID = A.PersonID
+			INNER JOIN AccountTypes AT ON A.AccountTypeID = AT.AccountTypeID
 		WHERE 
 			P.PersonID =  @personID
 		ORDER BY Status DESC
 
+		DECLARE @debitTransID int
+		SELECT @debitTransID = TransactionTypeID FROM TransactionTypes WHERE Name = 'DEBIT'	
 		SELECT
 			@accountCount = COUNT(Result.AccountID)
 			, @netBalance = ISNULL(SUM(Result.NetAccountBalance), 0)
 		FROM (
 			SELECT 
 				A.AccountID [AccountID]
-				, SUM((CASE T.Type WHEN 'DEBIT' THEN -1 ELSE 1 END) * ISNULL(AMOUNT, 0)) [NetAccountBalance]
+				, SUM((CASE T.TransactionTypeID WHEN @debitTransID THEN -1 ELSE 1 END) * ISNULL(AMOUNT, 0)) [NetAccountBalance]
 			FROM 
 					Persons P 
 					INNER JOIN Accounts A ON P.PersonID = A.PersonID
 					LEFT OUTER JOIN Transactions T ON A.AccountID = T.AccountID	
+					LEFT OUTER JOIN TransactionTypes TT ON T.TransactionTypeID = TT.TransactionTypeID
 			WHERE P.PersonID = @personID
 			GROUP BY A.AccountID, P.PersonID
 		) [Result]
@@ -43,9 +47,9 @@ GO
 CREATE OR ALTER PROC usp_ViewAccountTransactions
 	@accountID int,
 	@personID int,
-	@netBalance decimal(10, 2) out,
-	@totalPayments decimal(10, 2) out,
-	@totalPurchases decimal(10, 2) out
+	@netBalance decimal(19, 4) out,
+	@totalPayments decimal(19, 4) out,
+	@totalPurchases decimal(19, 4) out
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -53,23 +57,29 @@ BEGIN
 	BEGIN
 		SELECT
 			TransactionID [TransactionID]
-			, Description [Description]Acc
-			, T.Type [Type]
+			, Description [Description]
+			, TT.Name [Type]
 			, Date [Date]
 			, Amount [Amount]
 		FROM
 			Accounts A INNER JOIN Transactions T ON A.AccountID = T.AccountID
+			INNER JOIN TransactionTypes TT ON T.TransactionTypeID = TT.TransactionTypeID
 		WHERE
 			A.AccountID = @accountID AND A.PersonID = @personID
 		ORDER BY Date DESC
 
 
+		DECLARE @creditTypeID int, @debitTypeID int
+		SELECT @creditTypeID = TransactionTypeID FROM TransactionTypes WHERE Name = 'CREDIT'
+		SELECT @debitTypeID TransactionTypeID FROM TransactionTypes WHERE Name = 'DEBIT'
+
 		SELECT
-			@totalPayments = ISNULL(SUM(CASE T.Type WHEN 'CREDIT' THEN AMOUNT ELSE 0 END), 0),
-			@totalPurchases = ISNULL(SUM(CASE T.Type WHEN 'DEBIT' THEN AMOUNT ELSE 0 END), 0),
-			@netBalance = ISNULL(SUM(CASE T.Type WHEN 'DEBIT' THEN -AMOUNT ELSE AMOUNT END), 0)
+			@totalPayments = ISNULL(SUM(CASE T.TransactionTypeID WHEN @creditTypeID THEN AMOUNT ELSE 0 END), 0),
+			@totalPurchases = ISNULL(SUM(CASE T.TransactionTypeID WHEN @debitTypeID THEN AMOUNT ELSE 0 END), 0),
+			@netBalance = ISNULL(SUM(CASE T.TransactionTypeID WHEN @debitTypeID THEN -AMOUNT ELSE AMOUNT END), 0)
 		FROM
 			Accounts A JOIN Transactions T ON A.AccountID = T.AccountID
+			INNER JOIN TransactionTypes TT ON T.TransactionTypeID = TT.TransactionTypeID
 		WHERE
 			A.AccountID = @accountID
 	END
