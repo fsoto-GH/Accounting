@@ -7,7 +7,7 @@
     <ProjectGuid>{7A1ED6F6-A827-447A-8245-9341E83C4AF7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Accounting</RootNamespace>
-    <AssemblyName>Accounting.APP</AssemblyName>
+    <AssemblyName>Accounting</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

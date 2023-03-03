@@ -5,6 +5,7 @@ CREATE OR ALTER TRIGGER TR_Status_Change
 ON Accounts
 FOR UPDATE
 AS
+BEGIN
 	DECLARE @newStatus bit
 	DECLARE @id int, @debitTypeID int
 
@@ -31,7 +32,4 @@ AS
 			ROLLBACK
 		END
 	END
-
-	-- Trigger to delete a person.
-	-- Either execute the close account USP to ensure there is no balance or implement an alternative solution
-	-- UPDATE Referential integrity on Person FK to Cascade
+END
