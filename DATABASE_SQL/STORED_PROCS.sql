@@ -84,3 +84,41 @@ BEGIN
 			A.AccountID = @accountID
 	END
 END
+
+GO 
+CREATE OR ALTER PROC usp_DeletePerson
+	@personID int,
+	@forceClose bit = 0
+AS
+BEGIN
+	SET NOCOUNT ON
+	IF EXISTS (SELECT TOP 1 1 FROM Persons WHERE PersonID = @personID)
+	BEGIN
+		DECLARE @debitTypeID int
+		SET @debitTypeID = (SELECT TransactionTypeID FROM TransactionTypes WHERE Name = 'DEBIT')
+
+		DECLARE @netBalance decimal(19, 4) = NULL
+		SELECT @netBalance = ISNULL(SUM(CASE T.TransactionTypeID WHEN @debitTypeID THEN -AMOUNT ELSE AMOUNT END), 0)
+		FROM 
+			Accounts A INNER JOIN Transactions T ON A.AccountID = T.AccountID
+		WHERE
+			A.PersonID = @personID
+		GROUP BY A.AccountID
+
+		IF (@netBalance IS NULL OR @netBalance = 0 OR @forceClose = 1)
+		BEGIN
+			DELETE FROM Transactions
+			WHERE AccountID in (SELECT AccountID FROm Accounts WHERE PersonID = @personID)
+
+			DELETE FROM Accounts
+			WHERE PersonID = @personID
+
+			DELETE FROM Persons
+			WHERE PersonID = @personID
+		END
+		ELSE
+		BEGIN
+			RAISERROR('Person has existing balances. To force close fulfill @forceClose.', 16, 1)
+		END
+	END
+END
