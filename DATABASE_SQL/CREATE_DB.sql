@@ -54,7 +54,7 @@ CREATE TABLE Transactions
 	Amount decimal(19, 4) NOT NULL CONSTRAINT CK_Transactions_Amount CHECK (Amount >= 0),
 	Date datetime NOT NULL CONSTRAINT DF_Transaction_Date DEFAULT getdate()
 	CONSTRAINT PK_Transactions_TransactionID PRIMARY KEY CLUSTERED (TransactionID),
-	CONSTRAINT FK_Transactions_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
+	CONSTRAINT FK_Transactions_Accounts FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID) ON DELETE CASCADE,
 	CONSTRAINT FK_Transactions_TransactionType FOREIGN KEY (TransactionTypeID) REFERENCES TransactionTypes(TransactionTypeID)
 )
 
