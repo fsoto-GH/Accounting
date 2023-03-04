@@ -62,7 +62,7 @@ INSERT INTO AccountTypes (Name)
 VALUES ('CHECKING'), ('SAVINGS')
 
 INSERT INTO TransactionTypes (Name)
-VALUES ('CREDIT'), ('DEPOSIT')
+VALUES ('CREDIT'), ('DEBIT')
 
 GO
 USE master
