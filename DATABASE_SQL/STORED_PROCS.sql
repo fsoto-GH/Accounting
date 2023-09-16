@@ -71,7 +71,7 @@ BEGIN
 
 		DECLARE @creditTypeID int, @debitTypeID int
 		SELECT @creditTypeID = TransactionTypeID FROM TransactionTypes WHERE Name = 'CREDIT'
-		SELECT @debitTypeID TransactionTypeID FROM TransactionTypes WHERE Name = 'DEBIT'
+		SELECT @debitTypeID = TransactionTypeID FROM TransactionTypes WHERE Name = 'DEBIT'
 
 		SELECT
 			@totalPayments = ISNULL(SUM(CASE T.TransactionTypeID WHEN @creditTypeID THEN AMOUNT ELSE 0 END), 0),

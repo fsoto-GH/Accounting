@@ -1,6 +1,6 @@
-﻿using AccountingAPI.DTOs.Account;
+﻿using Accounting.API.DTOs.Account;
 
-namespace AccountingAPI.DAOs;
+namespace Accounting.API.DAOs;
 
 public interface IAccountDao
 {
@@ -10,7 +10,7 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="account"></param>
     /// <returns></returns>
-    public Task<int> Add(int personID, AccountAddDto account);
+    public Task<int> AddAsync(int personID, AccountAddDto account);
 
     /// <summary>
     /// Updates only the changed fields for the specified account.
@@ -23,7 +23,7 @@ public interface IAccountDao
     ///      0 - if there is no change between the records,
     ///      1 - if the changes were successful
     /// </returns>
-    public Task<int> Update(int personID, int accountID, AccountPatchDto account);
+    public Task<int> UpdateAsync(int personID, int accountID, AccountPatchDto account);
 
     /// <summary>
     /// Gets the details for a specific account.
@@ -31,14 +31,14 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <returns></returns>
-    public Task<AccountDto> Get(int personID, int accountID);
+    public Task<AccountDto> GetAsync(int personID, int accountID);
 
     /// <summary>
     /// Gets all the existing accounts for a specific user.
     /// </summary>
     /// <param name="personID"></param>
     /// <returns></returns>
-    public Task<AccountsSummaryDto> GetAll(int personID);
+    public Task<AccountsSummaryDto> GetAllAsync(int personID);
 
     /// <summary>
     /// Deletes the specified account.
@@ -46,5 +46,5 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <returns>A bool indicating whether the deletion was successful.</returns>
-    public Task<bool> Delete(int personID, int accountID);
+    public Task<bool> DeleteAsync(int personID, int accountID);
 }

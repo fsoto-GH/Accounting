@@ -1,84 +1,90 @@
-﻿using AccountingAPI.DAOs;
-using AccountingAPI.DTOs.Person;
+﻿using Accounting.API.Services.Person;
+using Accounting.API.DTOs.Person;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingAPI.Controllers;
+namespace Accounting.API.Controllers;
 
 [ApiController]
-[Route("v1")]
+[Route("v1/Persons")]
 public class PersonController : Controller
 {
-    private readonly IPersonDao _personService;
+    private readonly IPersonService _personService;
 
-    public PersonController(IPersonDao personService)
+    public PersonController(IPersonService personService)
     {
         _personService = personService;
     }
 
     [HttpGet]
-    [Route("Persons")]
+    [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Index()
     {
-        return Ok(await _personService.GetAll());
+        var res = await _personService.GetAllAsync();
+
+        return Ok(res);
     }
 
     [HttpGet]
-    [Route("Persons/{personID:int}")]
+    [Route("{personID:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(int personID)
     {
-        if (personID <= 0) return BadRequest();
+        if (personID <= 0)
+            return BadRequest();
 
-        var res = await _personService.Get(personID);
-        return res.PersonID == 0? NotFound() : Ok(res);
+        var res = await _personService.GetAsync(personID);
+
+        if (res is null)
+            return NotFound();
+
+        return Ok(res);
     }
 
     [HttpPost]
-    [Route("Persons/Add")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Route("Add")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Add([FromBody] PersonAddDto person)
     {
-        IPersonDto personDto = person;
-        personDto.TrimNames();
-        var res = await _personService.Add((PersonAddDto)personDto);
+        var res = await _personService.AddAsync(person);
 
+        if (res is null)
+            return BadRequest();
 
-        return res == 0 ? BadRequest() : Created($"v1/Persons/{res}", res);
+        return Ok(res);
     }
 
     [HttpPatch]
-    [Route("Persons/{personID:int}/Update")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Route("{personID:int}/Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int personID, [FromBody] PersonPatchDto person)
     {
-        if (personID <= 0) return BadRequest();
+        if (personID <= 0)
+            return BadRequest();
 
-        if (personID <= 0) return BadRequest();
-        IPersonDto personDto = person;
-        personDto.TrimNames();
+        var res = await _personService.UpdateAsync(personID, person);
 
-        var res = await _personService.Update(personID, (PersonPatchDto)personDto);
-        return res == -1 ? BadRequest() : NoContent();
+        if (res is null)
+            return NotFound();
+
+        return Ok(res);
     }
 
     [HttpDelete]
-    [Route("Persons/{personID:int}/Delete")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Route("{personID:int}/Delete")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int personID)
     {
-        if (personID <= 0) return BadRequest();
+        if (personID <= 0)
+            return BadRequest();
 
-        var res = await _personService.Delete(personID);
-        return res ? NotFound() : Ok();
+        var didDelete = await _personService.DeleteAsync(personID);
+        return didDelete ? NoContent(): NotFound();
     }
 }

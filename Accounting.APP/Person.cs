@@ -1,23 +1,14 @@
-﻿namespace Accounting
+﻿namespace Accounting.APP;
+
+public class Person
 {
-    public class Person
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string MiddleName { get; set; } = string.Empty;
+    public int ID { get; set; }
+
+    public override string ToString()
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string MiddleName { get; set; }
-        public int ID { get; set; }
-
-        public Person(int id, string first, string last, string middle)
-        {
-            ID = id;
-            FirstName = first;
-            LastName = last;
-            MiddleName = middle;
-        }
-
-        public override string ToString()
-        {
-            return $"{ID,5} {FirstName} {MiddleName} {LastName}";
-        }
+        return $"{ID,5} {FirstName} {MiddleName} {LastName}";
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace AccountingAPI.DTOs.Account;
+namespace Accounting.API.DTOs.Account;
 
 public class AccountsSummaryDto
 {

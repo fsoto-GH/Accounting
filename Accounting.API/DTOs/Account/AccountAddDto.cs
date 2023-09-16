@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Accounting.API.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace AccountingAPI.DTOs.Account;
+namespace Accounting.API.DTOs.Account;
 
 public class AccountAddDto : IAccountDto
 {
     [Required]
-    public string Type { get; set; } = string.Empty;
+    [Range(1, 2)]
+    public AccountType Type { get; set; }
 
     public string? NickName { get; set; } = null;
 }

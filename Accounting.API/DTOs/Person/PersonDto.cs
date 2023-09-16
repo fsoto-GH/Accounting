@@ -1,17 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AccountingAPI.DTOs.Person;
+namespace Accounting.API.DTOs.Person;
 
-public class PersonDto : IPersonDto
+public class PersonDto : PersonBaseDto
 {
     [Required]
     public int PersonID { get; set; }
 
     [Required]
-    public string FirstName { get; set; } = string.Empty;
+    [MaxLength(100)]
+    public override string UserName { get; set; } = string.Empty;
 
     [Required]
-    public string LastName { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public override string FirstName { get; set; } = string.Empty;
 
-    public string? MiddleName { get; set; }
+    [Required]
+    [MaxLength(50)]
+    public override string LastName { get; set; } = string.Empty;
+
+    [MaxLength(50)]
+    public override string? MiddleName { get; set; }
 }

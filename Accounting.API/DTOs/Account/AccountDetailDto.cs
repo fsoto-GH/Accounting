@@ -1,4 +1,6 @@
-﻿namespace AccountingAPI.DTOs.Account;
+﻿using Accounting.API.Enums;
+
+namespace Accounting.API.DTOs.Account;
 
 public class AccountDetailDto : IAccountDto
 {

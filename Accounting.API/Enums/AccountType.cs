@@ -1,7 +1,7 @@
-﻿namespace AccountingAPI.Enums;
+﻿namespace Accounting.API.Enums;
 
 public enum AccountType
 {
-    CHECKING,
-    SAVINGS,
+    CHECKING = 1,
+    SAVINGS = 2,
 }
