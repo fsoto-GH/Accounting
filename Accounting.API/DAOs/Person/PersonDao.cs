@@ -78,7 +78,7 @@ public class PersonDao : IPersonDao
         {
             sqlSteps.Add("LastName = @lastName");
         }
-        if (!string.IsNullOrWhiteSpace(person?.MiddleName))
+        if (person?.MiddleName == string.Empty)
         {
             sqlSteps.Add("MiddleName = @middleName");
         }
@@ -100,7 +100,7 @@ public class PersonDao : IPersonDao
         return await GetAsync(personID);
     }
 
-    public async Task<bool> DeleteAsync(int personID, bool? forceDelete=null)
+    public async Task<bool> DeleteAsync(int personID, bool forceDelete=false)
     {
         string sql = 
             "DELETE FROM Persons " +
@@ -110,10 +110,8 @@ public class PersonDao : IPersonDao
         using var cmd = AccountDatabaseFactory.StoredProcedureCommand(db, "[dbo].[usp_DeletePerson]");
         
         cmd.Parameters.AddWithValue("@personID", personID);
-        if (forceDelete is not null)
-        {
-            cmd.Parameters.AddWithValue("@forceClose", forceDelete.Value);
-        }
+        cmd.Parameters.AddWithValue("@forceClose", forceDelete);
+       
         var res = await db.ExecuteAsync(sql, new { personID });
 
         return res == 1;

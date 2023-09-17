@@ -1,6 +1,8 @@
 ﻿using Accounting.API.Services.Person;
 using Accounting.API.DTOs.Person;
 using Microsoft.AspNetCore.Mvc;
+using Accounting.API.Exceptions.Person;
+
 
 namespace Accounting.API.Controllers;
 
@@ -18,11 +20,9 @@ public class PersonController : Controller
     [HttpGet]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Index()
     {
         var res = await _personService.GetAllAsync();
-
         return Ok(res);
     }
 
@@ -32,46 +32,51 @@ public class PersonController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(int personID)
     {
-        if (personID <= 0)
-            return BadRequest();
-
-        var res = await _personService.GetAsync(personID);
-
-        if (res is null)
-            return NotFound();
-
-        return Ok(res);
+        try
+        {
+            return Ok(await _personService.GetAsync(personID));
+        }
+        catch (NotFoundPersonException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 
     [HttpPost]
     [Route("Add")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Add([FromBody] PersonAddDto person)
     {
-        var res = await _personService.AddAsync(person);
-
-        if (res is null)
-            return BadRequest();
-
-        return Ok(res);
+        try
+        {
+            return Ok(await _personService.AddAsync(person));
+        }
+        catch (InvalidPersonAdditionException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPatch]
     [Route("{personID:int}/Update")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int personID, [FromBody] PersonPatchDto person)
     {
-        if (personID <= 0)
-            return BadRequest();
-
-        var res = await _personService.UpdateAsync(personID, person);
-
-        if (res is null)
-            return NotFound();
-
-        return Ok(res);
+        try
+        {
+            return Ok(await _personService.UpdateAsync(personID, person));
+        }
+        catch (NotFoundPersonException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (InvalidPersonUpdateException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete]
@@ -81,10 +86,18 @@ public class PersonController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int personID)
     {
-        if (personID <= 0)
-            return BadRequest();
-
-        var didDelete = await _personService.DeleteAsync(personID);
-        return didDelete ? NoContent(): NotFound();
+        try
+        {
+            await _personService.DeleteAsync(personID);
+            return NoContent();
+        }
+        catch (NotFoundPersonException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (InvalidPersonDeletionException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

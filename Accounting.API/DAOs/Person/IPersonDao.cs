@@ -1,6 +1,5 @@
 ﻿using Accounting.API.DTOs.Person;
 using Accounting.API.DTOs.Person.PasswordHasher;
-
 namespace Accounting.API.DAOs.Person;
 
 public interface IPersonDao
@@ -40,7 +39,7 @@ public interface IPersonDao
     /// </summary>
     /// <param name="personID"></param>
     /// <returns>A bool indicating whether the deletion was successful.</returns>
-    public Task<bool> DeleteAsync(int personID, bool? forceDelete = null);
+    public Task<bool> DeleteAsync(int personID, bool forceDelete = false);
 
     /// <summary>
     /// Validates a Person's username and password against the database.

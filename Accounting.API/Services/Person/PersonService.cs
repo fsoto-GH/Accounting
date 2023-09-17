@@ -1,10 +1,11 @@
 ﻿using Accounting.API.DAOs;
 using Accounting.API.DAOs.Person;
 using Accounting.API.DTOs.Person;
+using Accounting.API.Exceptions.Person;
 
 namespace Accounting.API.Services.Person
 {
-    public class PersonService: IPersonService
+    public class PersonService : IPersonService
     {
         private readonly IPersonDao _personDao;
         private readonly IAccountDao _accountDao;
@@ -17,6 +18,11 @@ namespace Accounting.API.Services.Person
 
         public async Task<PersonDto?> GetAsync(int personID)
         {
+            var person = await _personDao.GetAsync(personID);
+
+            if (person is null)
+                throw new NotFoundPersonException($"Person with id: {personID} not found.");
+
             return await _personDao.GetAsync(personID);
         }
 
@@ -25,35 +31,46 @@ namespace Accounting.API.Services.Person
             return await _personDao.GetAllAsync();
         }
 
-        public async Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto person)
+        public async Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto personPatchDto)
         {
-            if (_personDao.GetAsync(personID) is null)
-                return null;
+            if (personPatchDto is null || await _personDao.GetAsync(personID) is null)
+            {
+                throw new NotFoundPersonException($"Person with id: {personID} not found.");
+            }
 
-            person.TrimNames();
-            return await _personDao.UpdateAsync(personID, person);
+            personPatchDto.TrimNames();
+            if (personPatchDto.FirstName?.Length == 0)
+                throw new InvalidPersonUpdateException($"First name cannot be empty.");
+            if (personPatchDto.LastName?.Length == 0)
+                throw new InvalidPersonUpdateException($"Last name cannot be empty.");
+
+            return await _personDao.UpdateAsync(personID, personPatchDto);
         }
 
-        public async Task<bool> DeleteAsync(int personID)
+        public async Task<bool> DeleteAsync(int personID, bool forceDelete = false)
         {
-            if (_personDao.GetAsync(personID) is null)
-                return false;
+            var person = await _personDao.GetAsync(personID);
+
+            if (person is null)
+                throw new NotFoundPersonException($"Person with id: {personID} not found.");
+
+            var personAccounts = await _accountDao.GetAllAsync(personID);
+
+            if (personAccounts.NetBalace != 0 && !forceDelete)
+            {
+                throw new InvalidPersonDeletionException($"Person with id: {personID} has a non-zero balance.");
+            }
 
             return await _personDao.DeleteAsync(personID);
         }
 
-        public async Task<PersonDto?> AddAsync(PersonAddDto person)
+        public async Task<PersonDto?> AddAsync(PersonAddDto personAddDto)
         {
-            if (person is null)
-                return null;
+            if (personAddDto is null)
+                throw new InvalidPersonAdditionException($"The supplied person details are invalid, and the entry could not be created.");
 
-            person.TrimNames();
-            return await _personDao.AddAsync(person);
-        }
-
-        public async Task<bool> ValidateCredentialsAsync(PersonCredentialsDto personCredentials)
-        {
-            return await _personDao.ValidateCredentials(personCredentials);
+            personAddDto.TrimNames();
+            return await _personDao.AddAsync(personAddDto);
         }
     }
 }
