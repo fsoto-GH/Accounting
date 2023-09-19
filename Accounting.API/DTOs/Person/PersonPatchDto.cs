@@ -8,7 +8,7 @@ public class PersonPatchDto : PersonBaseDto
     public override string? FirstName { get; set; }
 
     [MaxLength(50)]
-    public override string? LastName { get; set; } = null;
+    public override string? LastName { get; set; }
 
     [MaxLength(50)]
     public override string? MiddleName { get; set; } = null;

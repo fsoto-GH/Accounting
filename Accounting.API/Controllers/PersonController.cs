@@ -20,17 +20,16 @@ public class PersonController : Controller
     [HttpGet]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var res = await _personService.GetAllAsync();
-        return Ok(res);
+        return Ok(await _personService.GetAllAsync());
     }
 
     [HttpGet]
     [Route("{personID:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(int personID)
+    public async Task<IActionResult> GetAsync(int personID)
     {
         try
         {
@@ -43,10 +42,10 @@ public class PersonController : Controller
     }
 
     [HttpPost]
-    [Route("Add")]
+    [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Add([FromBody] PersonAddDto person)
+    public async Task<IActionResult> AddAsync([FromBody] PersonAddDto person)
     {
         try
         {
@@ -59,11 +58,11 @@ public class PersonController : Controller
     }
 
     [HttpPatch]
-    [Route("{personID:int}/Update")]
+    [Route("{personID:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(int personID, [FromBody] PersonPatchDto person)
+    public async Task<IActionResult> UpdateAsync(int personID, [FromBody] PersonPatchDto person)
     {
         try
         {
@@ -80,7 +79,7 @@ public class PersonController : Controller
     }
 
     [HttpDelete]
-    [Route("{personID:int}/Delete")]
+    [Route("{personID:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

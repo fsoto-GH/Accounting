@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Accounting.API.DTOs.Account;
 
-public class AccountAddDto : IAccountDto
+public class AccountAddDto : AccountBaseDto
 {
     [Required]
-    [Range(1, 2)]
-    public AccountType Type { get; set; }
+    public override AccountType? Type { get; set; }
 
-    public string? NickName { get; set; } = null;
+    [Required]
+    public override string? NickName { get; set; }
 }

@@ -10,7 +10,7 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="account"></param>
     /// <returns></returns>
-    public Task<int> AddAsync(int personID, AccountAddDto account);
+    public Task<AccountDto> AddAsync(int personID, AccountAddDto account);
 
     /// <summary>
     /// Updates only the changed fields for the specified account.
@@ -23,7 +23,7 @@ public interface IAccountDao
     ///      0 - if there is no change between the records,
     ///      1 - if the changes were successful
     /// </returns>
-    public Task<int> UpdateAsync(int personID, int accountID, AccountPatchDto account);
+    public Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto account);
 
     /// <summary>
     /// Gets the details for a specific account.

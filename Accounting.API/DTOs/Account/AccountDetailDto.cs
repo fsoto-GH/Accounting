@@ -2,7 +2,7 @@
 
 namespace Accounting.API.DTOs.Account;
 
-public class AccountDetailDto : IAccountDto
+public class AccountDetailDto : AccountBaseDto
 {
     public AccountDetailDto(AccountDto account)
     {
@@ -12,8 +12,8 @@ public class AccountDetailDto : IAccountDto
         Status = account.Status;
     }
 
-    public int AccountID { get; set; } = 0;
-    public string Type { get; set; }
-    public string? NickName { get; set; }
-    public bool Status { get; set; }
+    public int AccountID { get; set; }
+    public override AccountType? Type { get; set; }
+    public override string? NickName { get; set; }
+    public bool? Status { get; set; }
 }

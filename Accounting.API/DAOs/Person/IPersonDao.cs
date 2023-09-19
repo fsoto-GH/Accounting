@@ -25,7 +25,7 @@ public interface IPersonDao
     /// Queries DB to get person record.
     /// </summary>
     /// <param name="personID"></param>
-    /// <returns>Returns Person record or EmptyPerson if not found.</returns>
+    /// <returns>Returns Person record.</returns>
     public Task<PersonDto> GetAsync(int personID);
 
     /// <summary>
@@ -40,14 +40,4 @@ public interface IPersonDao
     /// <param name="personID"></param>
     /// <returns>A bool indicating whether the deletion was successful.</returns>
     public Task<bool> DeleteAsync(int personID, bool forceDelete = false);
-
-    /// <summary>
-    /// Validates a Person's username and password against the database.
-    /// </summary>
-    /// <param name="userName"></param>
-    /// <param name="passwordHash"></param>
-    /// <returns></returns>
-    public Task<bool> ValidateCredentials(PersonCredentialsDto personCredentials);
-
-    public Task<bool> StoreCredentials(int personID, PasswordHashResult passwordHashResult);
 }

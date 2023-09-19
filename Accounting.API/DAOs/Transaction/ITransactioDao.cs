@@ -30,7 +30,7 @@ public interface ITransactionDao
     /// <param name="accountID"></param>
     /// <param name="transactionID"></param>
     /// <returns></returns>
-    public Task<TransactionDto> GetAsync(int transactionID);
+    public Task<TransactionDto> GetAsync(int personID, int accountID, int transactionID);
 
     /// <summary>
     /// Get all the transactions for a specific person account.

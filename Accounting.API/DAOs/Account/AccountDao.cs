@@ -1,6 +1,7 @@
 ﻿using Accounting.API.DAOs;
 using Accounting.API.DTOs.Account;
 using Accounting.API.Enums;
+using Accounting.API.Exceptions.Account;
 using Accounting.API.Services;
 using Dapper;
 using System.Data;
@@ -9,37 +10,25 @@ namespace Accounting.API.DAOs.Account;
 
 public class AccountDao : IAccountDao
 {
-    public async Task<int> AddAsync(int personID, AccountAddDto account)
-    {
-        using var db = AccountDatabaseFactory.CreateConnection();
-        string sql = "INSERT INTO Accounts ([PersonID], [AccountTypeID], [NickName]) OUTPUT INSERTED.AccountID VALUES (@personID, @type, @nickName)";
-        var res = await db.QuerySingleAsync<int?>(sql, new
-        {
-            personID,
-            type = account.Type,
-            nickName = account?.NickName?.Trim()
-        });
-
-        return res ?? 0;
-    }
-
-    public async Task<bool> DeleteAsync(int personID, int accountID)
-    {
-        using var db = AccountDatabaseFactory.CreateConnection();
-        string sql = "DELETE FROM Accounts WHERE PersonID = @personID AND AccountID = @accountID";
-
-        var res = await db.ExecuteAsync(sql, new { personID, accountID });
-
-        return res == 1;
-    }
-
     public async Task<AccountDto> GetAsync(int personID, int accountID)
     {
-        string sql = "SELECT AccountID, PersonID, AT.Name [Type], NickName, Status FROM Accounts A INNER JOIN AccountTypes AT ON A.AccountTypeID = AT.AccountTypeID WHERE PersonID = @personID AND AccountID = @accountID";
         using var db = AccountDatabaseFactory.CreateConnection();
+        string sql =
+            $@"SELECT 
+                AccountID [{nameof(AccountDto.AccountID)}]
+                , PersonID [{nameof(AccountDto.PersonID)}]
+                , NickName [{nameof(AccountDto.NickName)}]
+                , Status [{nameof(AccountDto.Status)}]
+                , AccountTypeID [{nameof(AccountDto.Type)}] 
+            FROM 
+                [dbo].[Accounts] 
+            WHERE 
+                PersonID = @personID 
+                AND AccountID = @accountID";
+
         var res = await db.QuerySingleOrDefaultAsync<AccountDto>(sql, new { personID, accountID });
 
-        return res ?? new AccountDto();
+        return res;
     }
 
     public async Task<AccountsSummaryDto> GetAllAsync(int personID)
@@ -55,43 +44,83 @@ public class AccountDao : IAccountDao
         return new AccountsSummaryDto(
             personID: personID,
             accounts: res.ToArray(),
-            totalAccounts: _params.Get<int?>("@accountCount") ?? -1,
+            totalAccounts: _params.Get<int?>("@accountCount") ?? 0,
             netBalace: _params.Get<double?>("@netBalance") ?? 0
         );
     }
 
-    public async Task<int> UpdateAsync(int personID, int accountID, AccountPatchDto account)
+    public async Task<AccountDto> AddAsync(int personID, AccountAddDto account)
     {
-        var dbAccount = await GetAsync(personID, accountID);
-        if (account is null) return -1;
+        using var db = AccountDatabaseFactory.CreateConnection();
+        string sql =
+            "INSERT INTO [dbo].[Accounts] ([PersonID], [AccountTypeID], [NickName]) " +
+            "OUTPUT INSERTED.AccountID " +
+            "VALUES (@personID, @type, @nickName)";
 
-        var dbType = Enum.Parse(typeof(AccountType), dbAccount.Type.ToUpper()) as AccountType?;
+        var insertedID = await db.QuerySingleAsync<int>(sql, new
+        {
+            personID,
+            type = account.Type,
+            nickName = string.IsNullOrWhiteSpace(account.NickName) ? null : account.NickName.Trim()
+        });
+
+        return await GetAsync(personID, insertedID);
+    }
+
+    public async Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto account)
+    {
+        if (account is null)
+            throw new InvalidAccountUpdateException("Account cannot be null.");
+
         List<string> sqlSteps = new();
-        if (account.Type is not null && dbType != account.Type)
+        if (account.Type is not null)
         {
             sqlSteps.Add("AccountTypeID = @type");
         }
-        if (account.NickName is not null && !string.Equals(account.NickName, dbAccount?.NickName))
+        if (account.NickName == string.Empty)
         {
             sqlSteps.Add("NickName = @nickName");
         }
-        if (account.Status is not null && account.Status != dbAccount?.Status)
+        if (account.Status is not null)
         {
             sqlSteps.Add("Status = @status");
         }
 
-        if (sqlSteps.Count == 0) return 0;
-
-        string sql = $"UPDATE Accounts SET {string.Join(", ", sqlSteps)} WHERE AccountID = @accountID AND PersonID = @personID";
-        using var db = AccountDatabaseFactory.CreateConnection();
-
-        return await db.ExecuteAsync(sql, new
+        if (sqlSteps.Count != 0)
         {
-            personID,
-            accountID,
-            type = account?.Type,
-            nickName = account?.NickName?.Trim(),
-            status = account?.Status
-        });
+            string sql =
+                $"UPDATE " +
+                $"  [dbo].[Accounts] " +
+                $"SET " +
+                $"  {string.Join(", ", sqlSteps)} " +
+                $"WHERE " +
+                $"  AccountID = @accountID";
+            using var db = AccountDatabaseFactory.CreateConnection();
+
+            await db.ExecuteAsync(sql, new
+            {
+                personID,
+                accountID,
+                type = account?.Type,
+                nickName = account?.NickName == string.Empty ? null : account!.NickName,
+                status = account?.Status,
+            });
+        }
+
+        return await GetAsync(personID, accountID);
+    }
+
+    public async Task<bool> DeleteAsync(int personID, int accountID)
+    {
+        using var db = AccountDatabaseFactory.CreateConnection();
+        string sql =
+            "DELETE FROM [dbo].[Accounts] " +
+            "WHERE " +
+            "   PersonID = @personID " +
+            "   AND AccountID = @accountID";
+
+        var res = await db.ExecuteAsync(sql, new { personID, accountID });
+
+        return res == 1;
     }
 }

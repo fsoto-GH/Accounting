@@ -23,6 +23,14 @@ namespace Accounting.API.Services.Person
         public Task<IEnumerable<PersonDto>> GetAllAsync();
 
         /// <summary>
+        /// Creates an entry for the specified person.
+        /// </summary>
+        /// <param name="personAddDto"></param>
+        /// <returns>A <seealso cref="PersonDto"/> corresponding to the created person entry.</returns>
+        /// <exception cref="InvalidPersonAdditionException"></exception>
+        public Task<PersonDto?> AddAsync(PersonAddDto person);
+
+        /// <summary>
         /// This updates the details of the specified person.
         /// </summary>
         /// /// <param name="personID"></param>
@@ -41,13 +49,5 @@ namespace Accounting.API.Services.Person
         /// <exception cref="NotFoundPersonException"></exception>
         /// <exception cref="InvalidPersonDeletionException"></exception>
         public Task<bool> DeleteAsync(int personID, bool forceDelete = false);
-
-        /// <summary>
-        /// Creates an entry for the specified person.
-        /// </summary>
-        /// <param name="personAddDto"></param>
-        /// <returns>A <seealso cref="PersonDto"/> corresponding to the created person entry.</returns>
-        /// <exception cref="InvalidPersonAdditionException"></exception>
-        public Task<PersonDto?> AddAsync(PersonAddDto person);
     }
 }

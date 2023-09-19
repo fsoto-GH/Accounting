@@ -29,12 +29,12 @@ namespace Accounting.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> SetCredentials(PersonCredentialsDto personCredentials)
+        public IActionResult SetCredentials(PersonCredentialsDto personCredentials)
         {
             if (personCredentials.PersonID <= 0) return BadRequest();
 
             var res = _passwordHasher.HashPassword(personCredentials.Password);
-            await _personService.StoreCredentials(personCredentials.PersonID, res);
+            //await _personService.StoreCredentials(personCredentials.PersonID, res);
             return Ok();
         }
 

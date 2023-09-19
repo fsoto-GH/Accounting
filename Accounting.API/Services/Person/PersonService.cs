@@ -21,9 +21,9 @@ namespace Accounting.API.Services.Person
             var person = await _personDao.GetAsync(personID);
 
             if (person is null)
-                throw new NotFoundPersonException($"Person with id: {personID} not found.");
+                throw new NotFoundPersonException(personID);
 
-            return await _personDao.GetAsync(personID);
+            return person;
         }
 
         public async Task<IEnumerable<PersonDto>> GetAllAsync()
@@ -31,12 +31,20 @@ namespace Accounting.API.Services.Person
             return await _personDao.GetAllAsync();
         }
 
+        public async Task<PersonDto?> AddAsync(PersonAddDto personAddDto)
+        {
+            if (personAddDto is null)
+                throw new InvalidPersonAdditionException($"The supplied person details are invalid, and the entry could not be created.");
+
+            personAddDto.TrimNames();
+            return await _personDao.AddAsync(personAddDto);
+        }
+
         public async Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto personPatchDto)
         {
-            if (personPatchDto is null || await _personDao.GetAsync(personID) is null)
-            {
-                throw new NotFoundPersonException($"Person with id: {personID} not found.");
-            }
+            var person = await _personDao.GetAsync(personID);
+            if (person is null)
+                throw new NotFoundPersonException(personID);
 
             personPatchDto.TrimNames();
             if (personPatchDto.FirstName?.Length == 0)
@@ -52,25 +60,16 @@ namespace Accounting.API.Services.Person
             var person = await _personDao.GetAsync(personID);
 
             if (person is null)
-                throw new NotFoundPersonException($"Person with id: {personID} not found.");
+                throw new NotFoundPersonException(personID);
 
             var personAccounts = await _accountDao.GetAllAsync(personID);
 
             if (personAccounts.NetBalace != 0 && !forceDelete)
             {
-                throw new InvalidPersonDeletionException($"Person with id: {personID} has a non-zero balance.");
+                throw new InvalidPersonDeletionException($"Person ({personID}) has a non-zero balance.");
             }
 
             return await _personDao.DeleteAsync(personID);
-        }
-
-        public async Task<PersonDto?> AddAsync(PersonAddDto personAddDto)
-        {
-            if (personAddDto is null)
-                throw new InvalidPersonAdditionException($"The supplied person details are invalid, and the entry could not be created.");
-
-            personAddDto.TrimNames();
-            return await _personDao.AddAsync(personAddDto);
         }
     }
 }

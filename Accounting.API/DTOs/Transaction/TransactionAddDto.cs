@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Accounting.API.DTOs.Transaction;
 
-public class TransactionAddDto: ITransactionDto
+public class TransactionAddDto: TransactionBaseDto
 {
     [Required]
-    public string? Type { get; set; } = null;
-
+    public override TransactionType? Type { get; set; }
+    
+    [Required]
     [MaxLength(200)]
-    public string? Description { get; set; } = null;
+    public override string? Description { get; set; }
 
     [Required]
     [Range(minimum: 0, maximum: int.MaxValue)]

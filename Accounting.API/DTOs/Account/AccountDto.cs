@@ -1,16 +1,10 @@
-﻿using Accounting.API.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿namespace Accounting.API.DTOs.Account;
 
-namespace Accounting.API.DTOs.Account;
-
-public class AccountDto : IAccountDto
+public class AccountDto : AccountBaseDto
 {
-    public int AccountID { get; set; } = 0;
-    public int PersonID { get; set; } = 0;
+    public int AccountID { get; set; }
 
-    public string Type { get; set; } = string.Empty;
-
-    public string? NickName { get; set; } = string.Empty;
+    public int PersonID { get; set; }
 
     public bool Status { get; set; }
 }
