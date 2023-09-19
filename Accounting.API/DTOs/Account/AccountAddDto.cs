@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Accounting.API.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace AccountingAPI.DTOs.Account;
+namespace Accounting.API.DTOs.Account;
 
-public class AccountAddDto : IAccountDto
+public class AccountAddDto : AccountBaseDto
 {
     [Required]
-    public string Type { get; set; } = string.Empty;
+    public override AccountType? Type { get; set; }
 
-    public string? NickName { get; set; } = null;
+    [Required]
+    public override string? NickName { get; set; }
 }

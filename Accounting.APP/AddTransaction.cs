@@ -6,9 +6,9 @@ namespace Accounting
 {
     public partial class AddTransaction : Form
     {
-        public decimal Amount { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
+        public decimal Amount { get; set; } = decimal.Zero;
+        public string Type { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public AddTransaction()
         {
             InitializeComponent();

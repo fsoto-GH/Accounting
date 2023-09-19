@@ -1,24 +1,33 @@
-﻿using System.Globalization;
+﻿using Accounting.API.Enums;
 
-namespace AccountingAPI.DTOs.Transaction;
+namespace Accounting.API.DTOs.Transaction;
 
 public class AccountTransactionsDto
 {
-    public AccountTransactionsDto(int personID, int accountID, IEnumerable<TransactionDetailDto> transactions, double netBalance, double totalPurchases, double totalPayments)
+    public AccountTransactionsDto(int personID, int accountID, IEnumerable<TransactionDetailDto> transactions)
     {
         PersonID = personID;
         AccountID = accountID;
         Transactions = transactions;
-        FormattedNetBalance = netBalance.ToString("C", CultureInfo.GetCultureInfo("en-us"));
-        FormattedTotalPurchases = totalPurchases.ToString("C", CultureInfo.GetCultureInfo("en-us"));
-        FormattedTotalPayments = totalPayments.ToString("C", CultureInfo.GetCultureInfo("en-us"));
     }
 
     public int PersonID { get; set; }
+    
     public int AccountID { get; set; }
 
-    public IEnumerable<TransactionDetailDto> Transactions { get; set; } = new List<TransactionDetailDto>();
-    public string FormattedNetBalance { get; set; } = string.Empty;
-    public string FormattedTotalPurchases { get; set; } = string.Empty;
-    public string FormattedTotalPayments { get; set; } = string.Empty;
+    public IEnumerable<TransactionDetailDto> Transactions { get; set; }
+
+    public int NetBalance => TotalPurchases - TotalPayments;
+    
+    public int TotalPurchases => GetTotalOfType(TransactionType.DEBIT);
+
+    public int TotalPayments => GetTotalOfType(TransactionType.CREDIT);
+
+    public string FormattedNetBalance => $"${NetBalance / 100}.{NetBalance % 100:00}";
+
+    public string FormattedTotalPurchases => $"${TotalPurchases / 100}.{TotalPurchases % 100:00}";
+
+    public string FormattedTotalPayments => $"${TotalPayments / 100}.{TotalPayments % 100:00}";
+
+    private int GetTotalOfType(TransactionType type) => Transactions?.Where(x => x.Type == type)?.Sum(x => x.Amount) ?? 0;
 }

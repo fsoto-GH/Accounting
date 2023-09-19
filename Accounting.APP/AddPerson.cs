@@ -8,51 +8,58 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Accounting
+namespace Accounting.APP;
+
+public partial class AddPerson : Form
 {
-    public partial class AddPerson : Form
+    public Person Person { get; set; }
+
+    public AddPerson()
     {
-        public Person Person { get; set; }
-        public AddPerson()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Person = new Person();
+    }
 
-        private void txtLastName_Validating(object sender, CancelEventArgs e)
+    private void txtLastName_Validating(object sender, CancelEventArgs e)
+    {
+        if (string.IsNullOrEmpty(txtLastName.Text.Trim()))
         {
-            if (string.IsNullOrEmpty(txtLastName.Text.Trim()))
-            {
-                e.Cancel = true;
-                errorProvider.SetError(txtLastName, "Name cannot be empty.");
-            } else
-            {
-                errorProvider.SetError(txtLastName, "");
-            }
+            e.Cancel = true;
+            errorProvider.SetError(txtLastName, "Name cannot be empty.");
+        } else
+        {
+            errorProvider.SetError(txtLastName, "");
         }
+    }
 
-        private void txtFirstName_Validating(object sender, CancelEventArgs e)
+    private void txtFirstName_Validating(object sender, CancelEventArgs e)
+    {
+        if (string.IsNullOrEmpty(txtFirstName.Text.Trim()))
         {
-            if (string.IsNullOrEmpty(txtFirstName.Text.Trim()))
-            {
-                e.Cancel = true;
-                errorProvider.SetError(txtFirstName, "Name cannot be empty.");
-            }
-            else
-            {
-                errorProvider.SetError(txtFirstName, "");
-            }
+            e.Cancel = true;
+            errorProvider.SetError(txtFirstName, "Name cannot be empty.");
         }
-
-        private void btnAdd_Click(object sender, EventArgs e)
+        else
         {
-            if (ValidateChildren())
+            errorProvider.SetError(txtFirstName, "");
+        }
+    }
+
+    private void btnAdd_Click(object sender, EventArgs e)
+    {
+        if (ValidateChildren())
+        {
+            Person = new Person
             {
-                Person = new Person(-1, txtFirstName.Text.Trim(), txtLastName.Text.Trim(), txtMiddleName.Text.Trim());
-                DialogResult = DialogResult.OK;
-            } else
-            {
-                DialogResult = DialogResult.None;
-            }
+                ID = -1,
+                FirstName = txtFirstName.Text.Trim(),
+                LastName = txtLastName.Text.Trim(),
+                MiddleName = txtMiddleName.Text.Trim()
+            };
+            DialogResult = DialogResult.OK;
+        } else
+        {
+            DialogResult = DialogResult.None;
         }
     }
 }

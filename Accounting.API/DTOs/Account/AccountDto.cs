@@ -1,17 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Accounting.API.DTOs.Account;
 
-namespace AccountingAPI.DTOs.Account;
-
-public class AccountDto : IAccountDto
+public class AccountDto : AccountBaseDto
 {
-    public int AccountID { get; set; } = 0;
-    public int PersonID { get; set; } = 0;
+    public int AccountID { get; set; }
 
-    [Required]
-    public string Type { get; set; } = string.Empty;
+    public int PersonID { get; set; }
 
-    public string? NickName { get; set; } = string.Empty;
-
-    [Required]
     public bool Status { get; set; }
 }

@@ -1,14 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Accounting.API.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace AccountingAPI.DTOs.Transaction
+namespace Accounting.API.DTOs.Transaction;
+
+public class TransactionAddDto: TransactionBaseDto
 {
-    public class TransactionAddDto: ITransactionDto
-    {
-        [Required]
-        public string Type { get; set; } = string.Empty;
-        public string? Description { get; set; } = null;
+    [Required]
+    public override TransactionType? Type { get; set; }
+    
+    [Required]
+    [MaxLength(200)]
+    public override string? Description { get; set; }
 
-        [Required]
-        public double? Amount { get; set; } = null;
-    }
+    [Required]
+    [Range(minimum: 0, maximum: int.MaxValue)]
+    public int Amount { get; set; }
 }

@@ -1,10 +1,22 @@
-﻿namespace AccountingAPI.DTOs.Person;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class PersonPatchDto : IPersonDto
+namespace Accounting.API.DTOs.Person;
+
+public class PersonPatchDto : PersonBaseDto
 {
-    public string FirstName { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public override string? FirstName { get; set; }
 
-    public string LastName { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public override string? LastName { get; set; }
 
-    public string? MiddleName { get; set; } = null;
+    [MaxLength(50)]
+    public override string? MiddleName { get; set; } = null;
+
+    public override void TrimNames()
+    {
+        FirstName = FirstName?.Trim();
+        LastName = LastName?.Trim();
+        MiddleName = MiddleName?.Trim();
+    }
 }

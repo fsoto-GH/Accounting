@@ -1,9 +1,15 @@
-﻿namespace AccountingAPI.DTOs.Transaction
+﻿using Accounting.API.Enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace Accounting.API.DTOs.Transaction
 {
-    public class TransactionPatchDto: ITransactionDto
+    public class TransactionPatchDto: TransactionBaseDto
     {
-        public string Type { get; set; } = string.Empty;
-        public string? Description { get; set; } = null;
-        public double? Amount { get; set; } = null;
+        public override TransactionType? Type { get; set; } = null;
+
+        public override string? Description { get; set; } = null;
+
+        [Range(minimum: 0, maximum: int.MaxValue)]
+        public int? Amount { get; set; } = null;
     }
 }
