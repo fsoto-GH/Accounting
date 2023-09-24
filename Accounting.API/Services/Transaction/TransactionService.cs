@@ -4,6 +4,8 @@ using Accounting.API.DTOs.Transaction;
 using Accounting.API.Exceptions.Person;
 using Accounting.API.Exceptions.Account;
 using Accounting.API.Exceptions.Transaction;
+using Accounting.API.DAOs.Transaction;
+using Accounting.API.DAOs.Account;
 
 namespace Accounting.API.Services.Transaction
 {

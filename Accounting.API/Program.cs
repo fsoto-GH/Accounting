@@ -4,7 +4,6 @@ using Accounting.API.DAOs.Transaction;
 using Accounting.API.Services.Account;
 using Accounting.API.Services.Person;
 using Accounting.API.Services.Transaction;
-using Accounting.API.DAOs;
 using Accounting.API.Services.Person.PasswordHasher;
 
 var builder = WebApplication.CreateBuilder(args);

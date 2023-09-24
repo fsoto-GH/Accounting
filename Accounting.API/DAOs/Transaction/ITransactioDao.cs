@@ -1,6 +1,6 @@
 ﻿using Accounting.API.DTOs.Transaction;
 
-namespace Accounting.API.DAOs;
+namespace Accounting.API.DAOs.Transaction;
 
 public interface ITransactionDao
 {
@@ -10,7 +10,6 @@ public interface ITransactionDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="transaction"></param>
-    /// <returns>TBD</returns>
     public Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction);
 
     /// <summary>
@@ -20,7 +19,6 @@ public interface ITransactionDao
     /// <param name="accountID"></param>
     /// <param name="transactionID"></param>
     /// <param name="transaction"></param>
-    /// <returns></returns>
     public Task<TransactionDto> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction);
 
     /// <summary>
@@ -29,7 +27,6 @@ public interface ITransactionDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="transactionID"></param>
-    /// <returns></returns>
     public Task<TransactionDto> GetAsync(int personID, int accountID, int transactionID);
 
     /// <summary>
@@ -37,7 +34,6 @@ public interface ITransactionDao
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
-    /// <returns></returns>
     public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID);
 
     /// <summary>

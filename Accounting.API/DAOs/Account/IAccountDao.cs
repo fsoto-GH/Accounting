@@ -1,6 +1,6 @@
 ﻿using Accounting.API.DTOs.Account;
 
-namespace Accounting.API.DAOs;
+namespace Accounting.API.DAOs.Account;
 
 public interface IAccountDao
 {
@@ -9,7 +9,6 @@ public interface IAccountDao
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="account"></param>
-    /// <returns></returns>
     public Task<AccountDto> AddAsync(int personID, AccountAddDto account);
 
     /// <summary>
@@ -18,11 +17,6 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="account"></param>
-    /// <returns>
-    ///     -1 - if the PersonID/AccountID combo is invalid,
-    ///      0 - if there is no change between the records,
-    ///      1 - if the changes were successful
-    /// </returns>
     public Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto account);
 
     /// <summary>
@@ -30,14 +24,12 @@ public interface IAccountDao
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
-    /// <returns></returns>
     public Task<AccountDto> GetAsync(int personID, int accountID);
 
     /// <summary>
     /// Gets all the existing accounts for a specific user.
     /// </summary>
     /// <param name="personID"></param>
-    /// <returns></returns>
     public Task<AccountsSummaryDto> GetAllAsync(int personID);
 
     /// <summary>

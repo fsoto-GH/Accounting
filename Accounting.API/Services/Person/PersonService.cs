@@ -1,4 +1,4 @@
-﻿using Accounting.API.DAOs;
+﻿using Accounting.API.DAOs.Account;
 using Accounting.API.DAOs.Person;
 using Accounting.API.DTOs.Person;
 using Accounting.API.Exceptions.Person;
