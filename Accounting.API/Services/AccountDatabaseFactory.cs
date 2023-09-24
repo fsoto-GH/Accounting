@@ -13,7 +13,7 @@ public static class AccountDatabaseFactory
     {
         var connStr = new SqlConnectionStringBuilder()
         {
-            DataSource = @$"{@"."}",
+            DataSource = @"(localdb)\MSSQLLocalDB",
             InitialCatalog = "Accounting",
             IntegratedSecurity = true,
             ConnectTimeout = 30,
