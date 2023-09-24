@@ -23,17 +23,14 @@ public static class AccountDatabaseFactory
             TrustServerCertificate = false,
         };
 
-        Console.WriteLine(connStr.ToString());
         return new(connStr.ConnectionString);
     }
 
     public static SqlCommand StoredProcedureCommand(SqlConnection connection, string storedProcedureName)
     {
-        var cmd = new SqlCommand(storedProcedureName, connection)
+        return new SqlCommand(storedProcedureName, connection)
         {
             CommandType = CommandType.StoredProcedure,
-        };
-
-        return cmd;
+        }; ;
     }
 }
