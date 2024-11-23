@@ -8,27 +8,65 @@ public static class AccountDatabaseFactory
     private static readonly string? serverName = Environment.GetEnvironmentVariable("Accounting.ServerName");
     private static readonly string? userID = Environment.GetEnvironmentVariable("Accounting.UserID");
     private static readonly string? password = Environment.GetEnvironmentVariable("Accounting.Password");
+    private static bool IsLocal
+    {
+        get
+        {
+
+            if (bool.TryParse(Environment.GetEnvironmentVariable("Accounting.UseLocal"), out bool isLocal))
+                return isLocal;
+            return true;
+        }
+    }
 
     public static SqlConnection CreateConnection()
     {
-        if (serverName is null || userID is null || password is null)
-            throw new ArgumentException("Server name, user id, or password is undefined.");
 
-        var connStr = new SqlConnectionStringBuilder()
+        return new(ConnectionString);
+    }
+
+    private static string ConnectionString
+    {
+        get
         {
-            DataSource = serverName,
-            UserID = userID,
-            Password = password,
-            InitialCatalog = "Accounting",
-            IntegratedSecurity = false,
-            ConnectTimeout = 30,
-            ApplicationIntent = ApplicationIntent.ReadWrite,
-            MultiSubnetFailover = false,
-            Encrypt = false,
-            TrustServerCertificate = false,
-        };
+            SqlConnectionStringBuilder? connStr;
+            if (!IsLocal)
+            {
+                if (string.IsNullOrWhiteSpace(serverName) || string.IsNullOrWhiteSpace(userID) || string.IsNullOrWhiteSpace(password))
+                {
+                    throw new ArgumentException("Server name, user id, or password is undefined.");
+                }
 
-        return new(connStr.ConnectionString);
+                connStr = new()
+                {
+                    DataSource = serverName,
+                    UserID = userID,
+                    Password = password,
+                    InitialCatalog = "Accounting",
+                    IntegratedSecurity = false,
+                    ConnectTimeout = 30,
+                    ApplicationIntent = ApplicationIntent.ReadWrite,
+                    MultiSubnetFailover = false,
+                    Encrypt = false,
+                    TrustServerCertificate = false,
+                };
+            }
+            else
+            {
+                connStr = new()
+                {
+                    DataSource = @"(localdb)\MSSQLLocalDB",
+                    InitialCatalog = "Accounting",
+                    PersistSecurityInfo = false,
+                    MultipleActiveResultSets = false,
+                    ConnectTimeout = 30,
+                    IntegratedSecurity = true,
+                    TrustServerCertificate = false,
+                };
+            }
+
+            return connStr.ConnectionString;
+        }
     }
 
     public static SqlCommand StoredProcedureCommand(SqlConnection connection, string storedProcedureName)

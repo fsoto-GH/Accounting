@@ -13,22 +13,22 @@ public class TransactionDao : ITransactionDao
     public async Task<TransactionDto> GetAsync(int personID, int accountID, int transactionID)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
-        string sql =
-            $@"SELECT 
-                P.PersonID [{nameof(TransactionDto.PersonID)}] 
-                , A.AccountID [{nameof(TransactionDto.AccountID)}] 
-                , T.TransactionID [{nameof(TransactionDto.TransactionID)}] 
-                , T.Description [{nameof(TransactionDto.Description)}] 
-                , T.Date [{nameof(TransactionDto.Date)}] 
-                , T.TransactionTypeID [{nameof(TransactionDto.Type)}] 
-                , CAST(T.Amount * 100 as int) [{nameof(TransactionDto.Amount)}] 
-            FROM 
-                [dbo].[Persons] P INNER JOIN [dbo].[Accounts] A ON P.PersonID = A.PersonID 
-                INNER JOIN [dbo].[Transactions] T ON A.AccountID = T.AccountID 
-            WHERE 
-                P.PersonID = @personID
-                AND A.AccountID = @accountID
-                AND T.TransactionID = @transactionID";
+        string sql = $@"
+SELECT 
+    P.PersonID [{nameof(TransactionDto.PersonID)}] 
+    , A.AccountID [{nameof(TransactionDto.AccountID)}] 
+    , T.TransactionID [{nameof(TransactionDto.TransactionID)}] 
+    , T.Description [{nameof(TransactionDto.Description)}] 
+    , T.Date [{nameof(TransactionDto.Date)}] 
+    , T.TransactionTypeID [{nameof(TransactionDto.Type)}] 
+    , CAST(T.Amount * 100 as int) [{nameof(TransactionDto.Amount)}] 
+FROM 
+    [dbo].[Persons] P INNER JOIN [dbo].[Accounts] A ON P.PersonID = A.PersonID 
+    INNER JOIN [dbo].[Transactions] T ON A.AccountID = T.AccountID 
+WHERE 
+    P.PersonID = @personID
+    AND A.AccountID = @accountID
+    AND T.TransactionID = @transactionID";
 
         return await db.QuerySingleOrDefaultAsync<TransactionDto>(sql, new { personID, accountID, transactionID }); ;
     }
@@ -61,10 +61,12 @@ public class TransactionDao : ITransactionDao
     public async Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
-        string sql =
-            "INSERT INTO Transactions(AccountID, Amount, Description, TransactionTypeID) " +
-            "OUTPUT INSERTED.TransactionID " +
-            "VALUES(@accountID, @amount, @description, @transactionTypeID)";
+        string sql = $@"
+INSERT INTO 
+    Transactions(AccountID, Amount, Description, TransactionTypeID) 
+OUTPUT 
+    INSERTED.TransactionID 
+VALUES(@accountID, @amount, @description, @transactionTypeID)";
 
         var insertedID = await db.QuerySingleAsync<int>(sql, new
         {
@@ -100,12 +102,14 @@ public class TransactionDao : ITransactionDao
 
         if (sqlSteps.Count != 0)
         {
-            string sql =
-                $@"UPDATE [dbo].[Transactions] 
-                SET {string.Join(", ", sqlSteps)} 
-                WHERE 
-                    AccountID = @accountID
-                    AND TransactionID = @transactionID";
+            string sql = $@"
+UPDATE 
+    [dbo].[Transactions] 
+SET 
+    {string.Join(", ", sqlSteps)} 
+WHERE 
+    AccountID = @accountID
+    AND TransactionID = @transactionID";
 
             await db.ExecuteAsync(sql, new
             {
@@ -124,10 +128,11 @@ public class TransactionDao : ITransactionDao
     public async Task<bool> DeleteAsync(int transactionID)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
-        string sql =
-            @"DELETE FROM Transactions 
-            WHERE 
-                TransactionID = @transactionID ";
+        string sql = $@"
+DELETE FROM 
+    Transactions 
+WHERE 
+    TransactionID = @transactionID ";
 
         var res = await db.ExecuteAsync(sql, new { transactionID });
 
