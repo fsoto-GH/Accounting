@@ -15,16 +15,27 @@ public class AccountDao : IAccountDao
         using var db = AccountDatabaseFactory.CreateConnection();
         string sql =
             $@"SELECT 
-                AccountID [{nameof(AccountDto.AccountID)}]
-                , PersonID [{nameof(AccountDto.PersonID)}]
+                A.AccountID [{nameof(AccountDto.AccountID)}]
+                , P.PersonID [{nameof(AccountDto.PersonID)}]
                 , NickName [{nameof(AccountDto.NickName)}]
                 , Status [{nameof(AccountDto.Status)}]
-                , AccountTypeID [{nameof(AccountDto.Type)}] 
-            FROM 
-                [dbo].[Accounts] 
-            WHERE 
-                PersonID = @personID 
-                AND AccountID = @accountID";
+                , AccountTypeID [{nameof(AccountDto.Type)}]
+			    , CAST(ISNULL(SUM(CASE T.TransactionTypeID WHEN {(int)TransactionType.DEBIT} THEN T.Amount ELSE 0 END), 0) * 100 as int) [{nameof(AccountDto.TotalPurchases)}]
+			    , CAST(ISNULL(SUM(CASE T.TransactionTypeID WHEN {(int)TransactionType.CREDIT} THEN T.Amount ELSE 0 END), 0) * 100 as int) [{nameof(AccountDto.TotalPayments)}]
+			    , CAST(ISNULL(SUM(CASE T.TransactionTypeID WHEN {(int)TransactionType.DEBIT} THEN -T.Amount ELSE T.Amount END) * 100, 0) as int) [{nameof(AccountDto.NetBalance)}]
+                , COUNT(T.TransactionID) [{nameof(AccountDto.CountOfTransactions)}]
+            FROM
+                Persons P LEFT OUTER JOIN Accounts A ON P.PersonID = A.PersonID
+                LEFT OUTER JOIN Transactions T ON T.AccountID = A.AccountID
+            WHERE
+                P.PersonID = @personID
+                AND A.AccountID = @accountID
+            GROUP BY
+                A.AccountID
+                , P.PersonID
+                , A.NickName
+                , A.Status
+                , A.AccountTypeID";
 
         var res = await db.QuerySingleOrDefaultAsync<AccountDto>(sql, new { personID, accountID });
 

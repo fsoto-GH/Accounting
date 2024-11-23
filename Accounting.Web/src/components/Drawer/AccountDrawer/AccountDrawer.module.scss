@@ -1,0 +1,10 @@
+.grid {
+    --col-width: 25%;
+    display: grid;
+    row-gap: 30px;
+    grid-template-columns: var(--col-width) auto;
+
+    label {
+        padding: 0;
+    }
+}

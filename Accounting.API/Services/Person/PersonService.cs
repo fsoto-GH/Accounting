@@ -63,11 +63,8 @@ namespace Accounting.API.Services.Person
                 throw new NotFoundPersonException(personID);
 
             var personAccounts = await _accountDao.GetAllAsync(personID);
-
             if (personAccounts.NetBalace != 0 && !forceDelete)
-            {
                 throw new InvalidPersonDeletionException($"Person ({personID}) has a non-zero balance.");
-            }
 
             return await _personDao.DeleteAsync(personID);
         }

@@ -1,0 +1,11 @@
+body {
+    background-color: #0f0f0f;
+    color: #fff;
+    padding: 1% 2%;
+    font-family: "Roboto","Arial",sans-serif;
+    line-height: 2.2rem;
+    display: block;
+    max-height: 4.4rem;
+    text-overflow: ellipsis;
+    white-space: normal;
+}

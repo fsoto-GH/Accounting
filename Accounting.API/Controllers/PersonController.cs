@@ -19,7 +19,7 @@ public class PersonController : Controller
 
     [HttpGet]
     [Route("")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PersonDto>))]
     public async Task<IActionResult> GetAllAsync()
     {
         return Ok(await _personService.GetAllAsync());
@@ -27,7 +27,7 @@ public class PersonController : Controller
 
     [HttpGet]
     [Route("{personID:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(PersonDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAsync(int personID)
     {

@@ -4,6 +4,7 @@ using Accounting.API.Exceptions.Transaction;
 using Accounting.API.Services.Transaction;
 using Accounting.API.DTOs.Transaction;
 using Microsoft.AspNetCore.Mvc;
+using Accounting.API.Controllers.QueryParamaters;
 
 namespace Accounting.API.Controllers
 {
@@ -21,11 +22,11 @@ namespace Accounting.API.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllAsync(int personID, int accountID)
+        public async Task<IActionResult> GetAllAsync(int personID, int accountID, [FromQuery]TransactionQueryParameters queryParameters)
         {
             try
             {
-                return Ok(await _transactionService.GetAllAsync(personID, accountID));
+                return Ok(await _transactionService.GetAllAsync(personID, accountID, queryParameters));
             }
             catch (NotFoundPersonException e)
             {

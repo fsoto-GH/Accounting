@@ -6,6 +6,7 @@ using Accounting.API.Exceptions.Account;
 using Accounting.API.Exceptions.Transaction;
 using Accounting.API.DAOs.Transaction;
 using Accounting.API.DAOs.Account;
+using Accounting.API.Controllers.QueryParamaters;
 
 namespace Accounting.API.Services.Transaction
 {
@@ -39,7 +40,7 @@ namespace Accounting.API.Services.Transaction
             return transaction;
         }
 
-        public async Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID)
+        public async Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID, TransactionQueryParameters nameQuery)
         {
             var person = await _personDao.GetAsync(personID);
 
@@ -51,7 +52,7 @@ namespace Accounting.API.Services.Transaction
             if (account is null)
                 throw new NotFoundAccountException(personID, accountID);
 
-            return await _transactionDao.GetAllAsync(personID, accountID);
+            return await _transactionDao.GetAllAsync(personID, accountID, nameQuery);
         }
 
         public async Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction)
@@ -65,20 +66,15 @@ namespace Accounting.API.Services.Transaction
                 throw new NotFoundPersonException(personID);
 
             var account = await _accountDao.GetAsync(personID, accountID);
-
             if (account is null)
                 throw new NotFoundAccountException(personID, accountID);
             if (!account.Status)
                 throw new InvalidTransactionAdditionException($"Account ({accountID}) is closed, and transactions cannot be added to the account.");
 
             if (transaction.Amount < 0)
-            {
                 throw new InvalidTransactionAdditionException("Transaction amount must be non-negative.");
-            }
             if (transaction.Type is null)
-            {
                 throw new InvalidTransactionAdditionException("Transaction type is required.");
-            }
 
             return await _transactionDao.AddAsync(personID, accountID, transaction);
         }
@@ -100,9 +96,7 @@ namespace Accounting.API.Services.Transaction
                 throw new NotFoundTransactionException(personID, accountID, transactionID);
 
             if (transactionPatchDto.Amount is not null && transactionPatchDto.Amount < 0)
-            {
                 throw new InvalidTransactionUpdateException("Transaction amount must be non-negative.");
-            }
 
             return await _transactionDao.UpdateAsync(personID, accountID, transactionID, transactionPatchDto);
         }

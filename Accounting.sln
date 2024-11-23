@@ -5,9 +5,9 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounting.API", "Accounting.API\Accounting.API.csproj", "{A172CDD8-64F3-4AEA-8BA5-B5981B206805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.API.Test", "Accounting.API.Test\Accounting.API.Test.csproj", "{63302B27-BB79-4646-9651-56DE4FDB1003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounting.API.Test", "Accounting.API.Test\Accounting.API.Test.csproj", "{63302B27-BB79-4646-9651-56DE4FDB1003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.APP", "Accounting.APP\Accounting.APP.csproj", "{B84BFE1D-99A4-40D6-9450-18BE4958AB2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounting.APP", "Accounting.APP\Accounting.APP.csproj", "{B84BFE1D-99A4-40D6-9450-18BE4958AB2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

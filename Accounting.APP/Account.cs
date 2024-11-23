@@ -2,13 +2,13 @@
 {
     class Account
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string NickName { get; set; }
         private string Type { get; set; }
         public string Status { get; set; }
         public Account(int id, string name, string type, bool status)
         {
-            ID = id;
+            Id = id;
             NickName = name;
             Type = type;
             Status = status ? "Open" : "Closed";

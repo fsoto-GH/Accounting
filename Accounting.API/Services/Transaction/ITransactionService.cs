@@ -2,6 +2,7 @@
 using Accounting.API.Exceptions.Account;
 using Accounting.API.Exceptions.Transaction;
 using Accounting.API.DTOs.Transaction;
+using Accounting.API.Controllers.QueryParamaters;
 
 namespace Accounting.API.Services.Transaction
 {
@@ -27,7 +28,7 @@ namespace Accounting.API.Services.Transaction
         /// <returns></returns>
         /// <exception cref="NotFoundPersonException"></exception>
         /// <exception cref="NotFoundAccountException"></exception>
-        public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID);
+        public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID, TransactionQueryParameters nameQuery);
 
         /// <summary>
         /// Creates a transaction entry tied to the associated person account.

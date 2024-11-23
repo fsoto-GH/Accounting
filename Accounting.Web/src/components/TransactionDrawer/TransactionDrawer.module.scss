@@ -1,0 +1,41 @@
+.formDescription {
+    height: 3rem;
+}
+
+.grid {
+    --amount-col-width: 15%;
+    display: grid;
+    row-gap: 30px;
+    grid-template-columns: var(--amount-col-width) auto;
+
+    label {
+        padding: 0;
+    }
+
+    .descriptionLabel {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .descriptionTextarea {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .amountLabel {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .transactionAmount {
+        grid-column: 2;
+        grid-row: 2;
+        width: 50%;
+    }
+
+    .invalidAmount {
+        display: inline-block;
+        font-size: small;
+        color: rgb(195, 10, 10);
+    }
+}

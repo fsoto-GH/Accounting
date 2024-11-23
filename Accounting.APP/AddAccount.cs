@@ -25,7 +25,7 @@ public partial class AddAccount : Form
         cbType.DisplayMember = "Name";
     }
 
-    private void btnOK_Click(object sender, EventArgs e)
+    private void BtnOK_Click(object sender, EventArgs e)
     {
         NickName = string.IsNullOrEmpty(txtNickName.Text) ? string.Empty: txtNickName.Text.Trim();
         var type = (ComboBoxItem<AccountType>)cbType.SelectedItem;
@@ -33,7 +33,7 @@ public partial class AddAccount : Form
         DialogResult = DialogResult.OK;
     }
 
-    private void btnCancel_Click(object sender, EventArgs e)
+    private void BtnCancel_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.Cancel;
     }

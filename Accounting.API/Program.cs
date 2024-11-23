@@ -6,7 +6,9 @@ using Accounting.API.Services.Person;
 using Accounting.API.Services.Transaction;
 using Accounting.API.Services.Person.PasswordHasher;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
@@ -22,7 +24,14 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IPasswordHasher, Argon2PasswordHasher>();
 
+
 var app = builder.Build();
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:5173")
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,5 +45,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("corsapp");
 
 app.Run();

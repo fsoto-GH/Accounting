@@ -48,8 +48,8 @@ namespace Accounting.API.Services.Account
         {
             if (account is null)
                 throw new InvalidAccountAdditionException("Account cannot be null.");
-            var person = await _personDao.GetAsync(personID);
 
+            var person = await _personDao.GetAsync(personID);
             if (person is null)
                 throw new NotFoundPersonException(personID);
 
@@ -68,13 +68,8 @@ namespace Accounting.API.Services.Account
             if (account is null)
                 throw new NotFoundAccountException(personID, accountID);
 
-            var transactions = await _transactionDao.GetAllAsync(personID, accountID);
-            
-            if (transactions.NetBalance != 0 && accountPatchDto.Status == false)
-            {
+            if (account.NetBalance != 0 && accountPatchDto.Status == false)
                 throw new InvalidAccountUpdateException(personID, accountID);
-            }
-
 
             return await _accountDao.UpdateAsync(personID, accountID, accountPatchDto);
         }

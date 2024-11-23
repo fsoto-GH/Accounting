@@ -1,0 +1,29 @@
+.header {
+    color: #FFF;
+    background: #001;
+    position: fixed;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows:    repeat(1, 100px);
+
+    .heading {
+        grid-column: 1/2;
+        grid-row: 1;
+    }
+
+    .rightNavigation {
+        grid-column: 2/4;
+        grid-row: 1;
+        text-align: right;
+        
+        a {
+            display: inline-block;
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+        }
+    }
+}
+
+

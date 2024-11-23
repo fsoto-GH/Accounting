@@ -73,7 +73,7 @@ partial class AddPerson
         this.txtFirstName.Name = "txtFirstName";
         this.txtFirstName.Size = new System.Drawing.Size(164, 20);
         this.txtFirstName.TabIndex = 3;
-        this.txtFirstName.Validating += new System.ComponentModel.CancelEventHandler(this.txtFirstName_Validating);
+        this.txtFirstName.Validating += new System.ComponentModel.CancelEventHandler(this.TxtFirstName_Validating);
         // 
         // txtLastName
         // 
@@ -81,7 +81,7 @@ partial class AddPerson
         this.txtLastName.Name = "txtLastName";
         this.txtLastName.Size = new System.Drawing.Size(164, 20);
         this.txtLastName.TabIndex = 4;
-        this.txtLastName.Validating += new System.ComponentModel.CancelEventHandler(this.txtLastName_Validating);
+        this.txtLastName.Validating += new System.ComponentModel.CancelEventHandler(this.TxtLastName_Validating);
         // 
         // txtMiddleName
         // 
@@ -102,7 +102,7 @@ partial class AddPerson
         this.btnAdd.TabIndex = 6;
         this.btnAdd.Text = "Add Person";
         this.btnAdd.UseVisualStyleBackColor = true;
-        this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+        this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
         // 
         // AddPerson
         // 

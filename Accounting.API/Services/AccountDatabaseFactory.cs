@@ -5,17 +5,22 @@ namespace Accounting.API.Services;
 
 public static class AccountDatabaseFactory
 {
-    // TODO: Add a check constraint so that type is in ('Checking', 'Savings')
-    // TODO: Add a TR so that deleting is not viable without first closing the account.
-    // TODO: Add a TR so that deleting a person is not viable without first closing all the user's accounts.
+    private static readonly string? serverName = Environment.GetEnvironmentVariable("Accounting.ServerName");
+    private static readonly string? userID = Environment.GetEnvironmentVariable("Accounting.UserID");
+    private static readonly string? password = Environment.GetEnvironmentVariable("Accounting.Password");
 
     public static SqlConnection CreateConnection()
     {
+        if (serverName is null || userID is null || password is null)
+            throw new ArgumentException("Server name, user id, or password is undefined.");
+
         var connStr = new SqlConnectionStringBuilder()
         {
-            DataSource = @"(localdb)\MSSQLLocalDB",
+            DataSource = serverName,
+            UserID = userID,
+            Password = password,
             InitialCatalog = "Accounting",
-            IntegratedSecurity = true,
+            IntegratedSecurity = false,
             ConnectTimeout = 30,
             ApplicationIntent = ApplicationIntent.ReadWrite,
             MultiSubnetFailover = false,
@@ -31,6 +36,6 @@ public static class AccountDatabaseFactory
         return new SqlCommand(storedProcedureName, connection)
         {
             CommandType = CommandType.StoredProcedure,
-        }; ;
+        };
     }
 }

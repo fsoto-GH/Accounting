@@ -37,7 +37,11 @@ public class PersonDao : IPersonDao
                 , LastName [{nameof(PersonDto.LastName)}]
                 , MiddleName [{nameof(PersonDto.MiddleName)}]
             FROM  
-                [dbo].[Persons]";
+                [dbo].[Persons]
+            ORDER BY
+                FirstName
+                , LastName
+                , MiddleName";
 
         return await db.QueryAsync<PersonDto>(sql); ;
     }

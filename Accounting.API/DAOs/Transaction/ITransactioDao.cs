@@ -1,4 +1,5 @@
-﻿using Accounting.API.DTOs.Transaction;
+﻿using Accounting.API.Controllers.QueryParamaters;
+using Accounting.API.DTOs.Transaction;
 
 namespace Accounting.API.DAOs.Transaction;
 
@@ -34,7 +35,7 @@ public interface ITransactionDao
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
-    public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID);
+    public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID, TransactionQueryParameters queryParameters);
 
     /// <summary>
     /// Delete a specific user account transaction.
