@@ -10,18 +10,9 @@ namespace Accounting.API.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController(IPasswordHasher passwordHasher) : Controller
     {
-        private readonly IConfiguration _configuration;
-        private readonly IPersonDao _personService;
-        private readonly IPasswordHasher _passwordHasher;
-
-        public AuthController(IConfiguration configuration, IPersonDao personService, IPasswordHasher passwordHasher)
-        {
-            _configuration = configuration;
-            _personService = personService;
-            _passwordHasher = passwordHasher;
-        }
+        private readonly IPasswordHasher _passwordHasher = passwordHasher;
 
         [HttpPost]
         [Route("credentials")]

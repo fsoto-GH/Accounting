@@ -1,6 +1,6 @@
-type TransactionPatchDto = {
+type TransactionDto = {
   transactionID: number;
-  amount?: number;
-  description?: string;
-  type?: number;
+  amount: number;
+  description: string;
+  type: number;
 };

@@ -9,14 +9,9 @@ namespace Accounting.API.Controllers;
 
 [ApiController]
 [Route("v1/Persons/{personID:int}/Accounts")]
-public class AccountController : Controller
+public class AccountController(IAccountService accountService) : Controller
 {
-    private readonly IAccountService _accountService;
-
-    public AccountController(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
+    private readonly IAccountService _accountService = accountService;
 
     [HttpGet]
     [Route("")]

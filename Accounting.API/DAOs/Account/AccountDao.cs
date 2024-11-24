@@ -10,7 +10,7 @@ namespace Accounting.API.DAOs.Account;
 
 public class AccountDao : IAccountDao
 {
-    public async Task<AccountDto> GetAsync(int personID, int accountID)
+    public async Task<AccountDto?> GetAsync(int personID, int accountID)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
         string sql = $@"
@@ -36,10 +36,8 @@ GROUP BY
     , A.NickName
     , A.Status
     , A.AccountTypeID";
-
-        var res = await db.QuerySingleOrDefaultAsync<AccountDto>(sql, new { personID, accountID });
-
-        return res;
+        
+        return await db.QuerySingleOrDefaultAsync<AccountDto>(sql, new { personID, accountID });
     }
 
     public async Task<AccountsSummaryDto> GetAllAsync(int personID)
@@ -60,7 +58,7 @@ GROUP BY
         );
     }
 
-    public async Task<AccountDto> AddAsync(int personID, AccountAddDto account)
+    public async Task<AccountDto?> AddAsync(int personID, AccountAddDto account)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
         string sql = $@"
@@ -81,12 +79,12 @@ VALUES
         return await GetAsync(personID, insertedID);
     }
 
-    public async Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto account)
+    public async Task<AccountDto?> UpdateAsync(int personID, int accountID, AccountPatchDto account)
     {
         if (account is null)
             throw new InvalidAccountUpdateException("Account cannot be null.");
 
-        List<string> sqlSteps = new();
+        List<string> sqlSteps = [];
         if (account.Type is not null)
         {
             sqlSteps.Add("AccountTypeID = @type");

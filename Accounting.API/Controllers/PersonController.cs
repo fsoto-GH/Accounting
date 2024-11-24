@@ -8,14 +8,9 @@ namespace Accounting.API.Controllers;
 
 [ApiController]
 [Route("v1/Persons")]
-public class PersonController : Controller
+public class PersonController(IPersonService personService) : Controller
 {
-    private readonly IPersonService _personService;
-
-    public PersonController(IPersonService personService)
-    {
-        _personService = personService;
-    }
+    private readonly IPersonService _personService = personService;
 
     [HttpGet]
     [Route("")]

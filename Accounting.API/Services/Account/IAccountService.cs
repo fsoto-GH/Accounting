@@ -30,7 +30,7 @@ namespace Accounting.API.Services.Account
         /// <param name="account"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundPersonException"></exception>
-        public Task<AccountDto> AddAsync(int personID, AccountAddDto account);
+        public Task<AccountDto?> AddAsync(int personID, AccountAddDto account);
 
         /// <summary>
         /// Updates the details of the corresponding person account.
@@ -42,6 +42,6 @@ namespace Accounting.API.Services.Account
         /// <exception cref="NotFoundPersonException"></exception>
         /// <exception cref="NotFoundAccountException"></exception>
         /// <exception cref="InvalidAccountUpdateException"></exception>
-        public Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto accountPatchDto);
+        public Task<AccountDto?> UpdateAsync(int personID, int accountID, AccountPatchDto accountPatchDto);
     }
 }

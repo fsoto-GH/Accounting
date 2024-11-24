@@ -10,13 +10,9 @@ namespace Accounting.API.Controllers
 {
     [ApiController]
     [Route("v1/Persons/{personID:int}/Accounts/{accountID:int}/Transactions")]
-    public class TransactionController : Controller
+    public class TransactionController(ITransactionService transactionService) : Controller
     {
-        private readonly ITransactionService _transactionService;
-        public TransactionController(ITransactionService transactionService)
-        {
-            _transactionService = transactionService;
-        }
+        private readonly ITransactionService _transactionService = transactionService;
 
         [HttpGet]
         [Route("")]

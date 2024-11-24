@@ -71,6 +71,7 @@ function Pagination({
         <input
           type="number"
           name={`${id}-page`}
+          className={styles.pageInput}
           min={MIN_PAGE}
           max={getMaxPageVal()}
           onChange={(e) =>
@@ -78,6 +79,7 @@ function Pagination({
           }
           value={currPage}
         ></input>
+        of {getMaxPageVal()}
         <button
           role="button"
           disabled={currPage === getMaxPageVal()}

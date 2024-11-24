@@ -11,7 +11,7 @@ public interface ITransactionDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="transaction"></param>
-    public Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction);
+    public Task<TransactionDto?> AddAsync(int personID, int accountID, TransactionAddDto transaction);
 
     /// <summary>
     /// Update the specified transaction details.
@@ -20,7 +20,7 @@ public interface ITransactionDao
     /// <param name="accountID"></param>
     /// <param name="transactionID"></param>
     /// <param name="transaction"></param>
-    public Task<TransactionDto> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction);
+    public Task<TransactionDto?> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction);
 
     /// <summary>
     /// Get the details of a specific person account transaction.
@@ -28,7 +28,7 @@ public interface ITransactionDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="transactionID"></param>
-    public Task<TransactionDto> GetAsync(int personID, int accountID, int transactionID);
+    public Task<TransactionDto?> GetAsync(int personID, int accountID, int transactionID);
 
     /// <summary>
     /// Get all the transactions for a specific person account.

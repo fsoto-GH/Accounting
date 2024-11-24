@@ -8,7 +8,7 @@ namespace Accounting.API.DAOs.Person;
 
 public class PersonDao : IPersonDao
 {
-    public async Task<PersonDto> GetAsync(int personID)
+    public async Task<PersonDto?> GetAsync(int personID)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
 
@@ -46,7 +46,7 @@ ORDER BY
         return await db.QueryAsync<PersonDto>(sql); ;
     }
 
-    public async Task<PersonDto> AddAsync(PersonAddDto person)
+    public async Task<PersonDto?> AddAsync(PersonAddDto person)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
 
@@ -62,12 +62,12 @@ VALUES (@firstName, @lastName, @middleName)";
         return await GetAsync(insertedID);
     }
 
-    public async Task<PersonDto> UpdateAsync(int personID, PersonPatchDto person)
+    public async Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto person)
     {
         if (person is null)
             throw new InvalidPersonUpdateException("Person cannot be null.");
 
-        List<string> sqlSteps = new();
+        List<string> sqlSteps = [];
         if (!string.IsNullOrWhiteSpace(person.FirstName))
         {
             sqlSteps.Add("FirstName = @firstName");

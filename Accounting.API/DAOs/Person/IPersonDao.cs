@@ -7,19 +7,19 @@ public interface IPersonDao
     /// Adds the specified person and returns the PK of the inserted record.
     /// </summary>
     /// <param name="person"></param>
-    public Task<PersonDto> AddAsync(PersonAddDto person);
+    public Task<PersonDto?> AddAsync(PersonAddDto person);
 
     /// <summary>
     /// Updates the corresponding fields of the for the specified record.
     /// </summary>
     /// <param name="person"></param>
-    public Task<PersonDto> UpdateAsync(int personID, PersonPatchDto person);
+    public Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto person);
 
     /// <summary>
     /// Queries DB to get person record.
     /// </summary>
     /// <param name="personID"></param>
-    public Task<PersonDto> GetAsync(int personID);
+    public Task<PersonDto?> GetAsync(int personID);
 
     /// <summary>
     /// Gets all the Person records.

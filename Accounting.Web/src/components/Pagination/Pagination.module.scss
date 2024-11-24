@@ -1,13 +1,7 @@
-.left {
-    float: left;
-}
-  
-.right {
-    float: right;
-}
-
-
 .container {
+    display: flex;
+    justify-content: space-between;
+
     .leftArrow  {
         margin: 0px 5px;
         margin-left: 0;
@@ -17,4 +11,8 @@
         margin: 0px 5px;
         margin-right: 0;
     }
+}
+
+.pageInput {
+    margin-right: 10px;
 }

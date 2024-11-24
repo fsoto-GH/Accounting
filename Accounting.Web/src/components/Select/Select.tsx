@@ -4,7 +4,7 @@ import styles from "./Select.module.scss";
 
 type Props = {
   id: string;
-  placeholderText: string;
+  placeholder: string;
   options: Array<SelectOption> | undefined;
   className?: string;
   size?: number;
@@ -19,7 +19,7 @@ function Select({
   onSelectedIndexChanged,
   className,
   size = 1,
-  placeholderText,
+  placeholder,
 }: Props) {
   return (
     <>
@@ -31,7 +31,7 @@ function Select({
         className={`${styles.select} ${className ?? ""}`}
         value={value}
       >
-        <option value="">{placeholderText}</option>
+        <option value="">{placeholder}</option>
         {options &&
           options?.length > 0 &&
           options.map((x) => (

@@ -48,13 +48,13 @@ DROP TABLE IF EXISTS #FilteredTransactions";
 
         private static string GetComplexWhereClause(TransactionQueryParameters queryParameters)
         {
-            string[] whereConditions = new string[] {
+            string[] whereConditions = [
                 (queryParameters.StartDate.HasValue ? $"[{nameof(TransactionDetailDto.Date)}] >= @{nameof(queryParameters.StartDate)}" : string.Empty),
                 (queryParameters.EndDate.HasValue ? $"[{nameof(TransactionDetailDto.Date)}] <= @{nameof(queryParameters.EndDate)}" : string.Empty),
                 (queryParameters.MinAmount.HasValue ? $"[{nameof(TransactionDetailDto.Amount)}] >= @{nameof(queryParameters.MinAmount)}" : string.Empty),
                 (queryParameters.MaxAmount.HasValue ? $"[{nameof(TransactionDetailDto.Amount)}] <= @{nameof(queryParameters.MaxAmount)}" : string.Empty),
                 (queryParameters.NameQuery is not null ? $"[{nameof(TransactionDetailDto.Description)}] LIKE @{nameof(queryParameters.NameQuery)}" : string.Empty)
-            };
+            ];
 
             return string.Join("\n\tAND", whereConditions.Where(x => !string.Equals(x, string.Empty)));
         }

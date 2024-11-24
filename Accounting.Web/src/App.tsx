@@ -30,7 +30,9 @@ function App() {
   const [selectedAccountSummary, setAccountSummary] =
     useState<AccountSummary>();
 
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction>();
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | undefined
+  >();
 
   const [pagedTransactions, setPagedTransactions] =
     useState<PagedTransactions>();
@@ -79,7 +81,10 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
 
-    if (!selectedPerson || !selectedPerson.personID) return;
+    if (!selectedPerson || !selectedPerson.personID) {
+      setPersonAccounts(undefined);
+      return;
+    }
 
     fetch(`${urlBase}/v1/Persons/${selectedPerson?.personID}/Accounts`, {
       method: "GET",
@@ -201,7 +206,7 @@ function App() {
         <Select
           id="selectPersons"
           className={styles.select}
-          placeholderText="Select a person."
+          placeholder="Select a person"
           value={selectedPerson?.personID ?? 0}
           options={Array.from(allPersons, ([_, value]) => ({
             value: value.personID,
@@ -228,15 +233,12 @@ function App() {
   };
 
   const handleTransactionEditClick = (transactionID: number) => {
-    const clickedTrans = pagedTransactions?.transactions.find(
-      (x) => x.transactionID === transactionID
-    );
-    if (!clickedTrans) {
+    if (!transactionID) {
       setActiveDrawer(undefined);
-      setSelectedTransaction(undefined);
+      setSelectedTransactionId(undefined);
     } else {
-      setSelectedTransaction(clickedTrans);
       setActiveDrawer("Transaction");
+      setSelectedTransactionId(transactionID);
     }
   };
 
@@ -246,7 +248,7 @@ function App() {
         <Select
           id="selectAccounts"
           className={styles.select}
-          placeholderText="Select an account."
+          placeholder="Select an account"
           value={selectedAccount?.accountID ?? 0}
           options={selectedPersonAccounts?.accounts.map<SelectOption>((x) => {
             return {
@@ -272,7 +274,7 @@ function App() {
 
   const renderAccountSummary = () => (
     <SummaryComponent
-      id="transactionsSummary"
+      id="personAccountSummary"
       componentHeaderText="Account Summary"
       summaryLines={
         selectedAccountSummary
@@ -292,23 +294,21 @@ function App() {
             ]
           : []
       }
-      className={styles.transactionsSummary}
+      className={styles.personAccountSummary}
     ></SummaryComponent>
   );
 
   const renderTransactionActions = () => {
     return (
       <div id="transactionActions" className={styles.transactionActions}>
-        <div id="left-menu" className={styles.left}>
-          <input
-            name="description-query"
-            placeholder="Search by description"
-            className={styles.searchQuery}
-            onChange={(e) => setNameQuery(e.target.value)}
-            size={100}
-            max={200}
-          ></input>
-        </div>
+        <input
+          name="description-query"
+          placeholder="Search by description"
+          className={styles.searchQuery}
+          onChange={(e) => setNameQuery(e.target.value)}
+          size={100}
+          max={200}
+        ></input>
         <Pagination
           id="pagination"
           className={styles.pagination}
@@ -335,7 +335,7 @@ function App() {
 
   const renderPersonSummary = () => (
     <SummaryComponent
-      id="personAccountSummary"
+      id="personSummary"
       componentHeaderText={`${selectedPerson?.firstName}'s Summary`}
       summaryLines={
         selectedPersonAccounts
@@ -373,46 +373,63 @@ function App() {
   }
 
   return (
-    <div id="content" className={styles.content}>
+    <>
       <div id="selectGroup" className={styles.selectGroup}>
         {renderPersonSelect()}
         {renderAccountsSelect()}
       </div>
-      {selectedPerson && (
-        <div id="summariesArea" className={styles.summaries}>
-          {renderPersonSummary()}
-          {selectedAccount && renderAccountSummary()}
-        </div>
-      )}
-      {selectedPerson && (
-        <div id="transactionsArea" className={styles.transactionsArea}>
+      <div id="content" className={styles.content}>
+        {/* {selectedAccount && (
+          <h2 className={styles.accountName}>
+            {`[${
+              selectedAccount?.type == AccountType.CHECKING
+                ? "Checking"
+                : "Savings"
+            }] ${selectedAccount?.nickName}`}
+          </h2>
+        )} */}
+        <div id="filtering" className={styles.filtering}>
           {renderTransactionActions()}
-          {renderTransactions()}
         </div>
-      )}
-      {selectedPerson && selectedAccount && (
-        <TransactionDrawer
-          id="edit-transaction"
-          headerText="Edit Transaction"
-          isOpen={activeDrawerName === "Transaction"}
-          accountID={selectedAccount.accountID}
-          personID={selectedPerson.personID}
-          selectedTransaction={selectedTransaction}
-          handleSubmit={handleTransactionChange}
-          handleDrawerClose={() => setActiveDrawer(undefined)}
-        ></TransactionDrawer>
-      )}
-      {selectedPerson && activeDrawerName === "Account" && (
-        <AccountDrawer
-          id="add-account"
-          headerText={`Add Account for ${selectedPerson.firstName}`}
-          isOpen={activeDrawerName === "Account"}
-          personID={selectedPerson.personID}
-          handleDrawerClose={() => setActiveDrawer(undefined)}
-          handleSubmit={handleTransactionChange}
-        ></AccountDrawer>
-      )}
-    </div>
+
+        <div id="main" className={styles.main}>
+          {selectedPerson && (
+            <div id="transactionsArea" className={styles.transactionsArea}>
+              {renderTransactions()}
+            </div>
+          )}
+          {selectedPerson && (
+            <div id="summariesArea" className={styles.summariesArea}>
+              {renderPersonSummary()}
+              {selectedAccount && renderAccountSummary()}
+            </div>
+          )}
+        </div>
+
+        {selectedPerson && selectedAccount && (
+          <TransactionDrawer
+            id="edit-transaction"
+            headerText="Edit Transaction"
+            isOpen={activeDrawerName === "Transaction"}
+            accountID={selectedAccount.accountID}
+            personID={selectedPerson.personID}
+            transactionID={selectedTransactionId ?? 0}
+            handleSubmit={handleTransactionChange}
+            handleDrawerClose={() => setActiveDrawer(undefined)}
+          ></TransactionDrawer>
+        )}
+        {selectedPerson && activeDrawerName === "Account" && (
+          <AccountDrawer
+            id="add-account"
+            headerText={`Add Account for ${selectedPerson.firstName}`}
+            isOpen={activeDrawerName === "Account"}
+            personID={selectedPerson.personID}
+            handleDrawerClose={() => setActiveDrawer(undefined)}
+            handleSubmit={handleTransactionChange}
+          ></AccountDrawer>
+        )}
+      </div>
+    </>
   );
 }
 

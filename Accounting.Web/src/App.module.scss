@@ -1,89 +1,126 @@
-.content {
-  display: grid;
-  grid-template-columns: 100%;
+* {
+  font-size: small;
+
+  @media screen and (min-width: 992px)  {
+    font-size: medium;
+  }
+}
+
+.selectGroup {
+  display: flex;
+  flex-direction: column;
   padding: 10px;
+
+  .selectPersons,
+  .selectAccounts {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    select {
+      width: 100%;
+      height: 30px;
+    }
+
+
+    button {
+      height: 30px;
+    }
+  }
+
+
+  @media screen and (min-width: 992px)  {
+    flex-direction: row;
+    justify-content: space-between;
+
+    .selectPersons,
+    .selectAccounts {
+      display: flex;
+      flex-direction: row;
+      
+      select {
+        min-width: 300px;
+        width: fit-content;
+        height: 30px;
+      }
+  
+      .selectPersons {
+        margin-right: 10px;
+      }
+  
+      button {
+        height: 30px;
+      }
+    }
+  }
+
+
+}
+
+.filtering {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0;
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  flex-direction: column;
+
+  .summariesArea {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+  }
+
+  @media screen and (min-width: 992px)  {
+    flex-direction: row;
+    
+    .transactionsArea {
+      width: 75%;
+    }
+
+    .summariesArea {
+      width: 24%;
+      padding-top: 0px;
+    }
+  }
+}
 
 
   button {
     margin-left: 10px;
   }
-
-  .selectGroup {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-row-start: 1;
-    grid-column-start: 1;
-    grid-column-end: 3;
-
-
-    .selectPersons, .selectAccounts {
-      height: 100%;
-      margin-left: 0;
-      padding: 0;
-
-      .select {
-        margin-left: 0;
-        width: 95%;
-
-      }
-
-      button {
-        margin-left: 1%;
-        margin-right: 1%;
-        height: 40px;
-      }
-    }
-
-    .selectPersons {
-      display: flex;
-      grid-column-start: 1;
-      grid-column-end: 2;
-    }
-
-    .selectAccounts {
-      display: flex;
-      grid-column-start: 2;
-      grid-column-end: 3;
-      float: right;
-    }
-  }
-
-  @media only screen and (max-width: 750px){
-    .transactionsSummary {
-      grid-row-start: 4;
-    }
-
-    .transactionsArea {
-      grid-column-start: 1;
-      grid-row-start: 3;
-    }
-  }
-
-  @media only screen and (min-width: 750px){
-    grid-template-columns: 70% 30%;
-
-    .transactionsArea {
-      display: grid;
-      grid-column-start: 1;
-      grid-row-start: 3;
-    }
-
-    .summaries {
-      grid-column-start: 2;
-      grid-row-start: 3;
-      margin-left: 20px;
-    }
-  }
 }
 
+.personSummary, .personAccountSummary {
+  margin-bottom: 10px;
+}
     
+
+
+.accountName  {
+  margin: 0;
+}
+
 .transactionActions {
-  
   background-color: #242121;
-  margin-top: 20px;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+
+  .searchQuery {
+    height: 30px;
+  }
 }
 
 .left {
@@ -93,7 +130,6 @@
 .right {
   float: right;
 }
-
 
 .alignRight {
   text-align: right;
@@ -113,9 +149,9 @@
   padding-right: 20px;
   border: 1px solid transparent;
   transition: color .15s ease-in-out,
-  background-color .15s ease-in-out, 
-  border-color .15s ease-in-out, 
-  box-shadow .15s ease-in-out;
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
   user-select: none;
 }
 
@@ -126,7 +162,7 @@
 }
 
 .primary:focus {
-  box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5)
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, .5)
 }
 
 .secondary {
@@ -139,9 +175,9 @@
   padding-right: 20px;
   border: 1px solid transparent;
   transition: color .15s ease-in-out,
-  background-color .15s ease-in-out, 
-  border-color .15s ease-in-out, 
-  box-shadow .15s ease-in-out;
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
   user-select: none;
 }
 
@@ -152,14 +188,6 @@
 }
 
 .secondary:focus {
-  box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5)
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, .5)
 }
 
-.pagination {
-  clear: both;
-}
-
-.searchQuery {
-  width: 50%;
-  height: 20px;
-}

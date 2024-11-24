@@ -10,7 +10,7 @@ namespace Accounting.API.DAOs.Transaction;
 public class TransactionDao : ITransactionDao
 {
     
-    public async Task<TransactionDto> GetAsync(int personID, int accountID, int transactionID)
+    public async Task<TransactionDto?> GetAsync(int personID, int accountID, int transactionID)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
         string sql = $@"
@@ -30,7 +30,7 @@ WHERE
     AND A.AccountID = @accountID
     AND T.TransactionID = @transactionID";
 
-        return await db.QuerySingleOrDefaultAsync<TransactionDto>(sql, new { personID, accountID, transactionID }); ;
+        return await db.QuerySingleOrDefaultAsync<TransactionDto>(sql, new { personID, accountID, transactionID });
     }
 
     public async Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID, TransactionQueryParameters queryParameters)
@@ -58,7 +58,7 @@ WHERE
         return new AccountTransactionsDto(personID, accountID, totalApplicableTransactions, res);
     }
 
-    public async Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction)
+    public async Task<TransactionDto?> AddAsync(int personID, int accountID, TransactionAddDto transaction)
     {
         using var db = AccountDatabaseFactory.CreateConnection();
         string sql = $@"
@@ -79,14 +79,14 @@ VALUES(@accountID, @amount, @description, @transactionTypeID)";
         return await GetAsync(personID, accountID, insertedID);
     }
 
-    public async Task<TransactionDto> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction)
+    public async Task<TransactionDto?> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction)
     {
         if (transaction is null)
             throw new InvalidTransactionUpdateException("Transaction cannot be null.");
 
         using var db = AccountDatabaseFactory.CreateConnection();
 
-        List<string> sqlSteps = new();
+        List<string> sqlSteps = [];
         if (transaction.Type is not null)
         {
             sqlSteps.Add("TransactionTypeID = @transactionTypeID");
