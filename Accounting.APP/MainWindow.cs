@@ -96,6 +96,11 @@ public partial class MainWindow : Form
             }
         }
 
+        if (people.Count == 0)
+        {
+            DisableAll();
+        }
+
         cbPeople.DataSource = people;
         if (indexToSelect != null && indexToSelect > 0)
         {
@@ -209,6 +214,7 @@ public partial class MainWindow : Form
         btnRenameAccount.Enabled = false;
         btnAddAccount.Enabled = false;
         btnChangeAmount.Enabled = false;
+        btnChangeType.Enabled = false;
         btnEditDesc.Enabled = false;
         btnAddTrans.Enabled = false;
     }
