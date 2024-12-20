@@ -74,7 +74,7 @@ This project is still a part of my daily workflow, and I’m continuously iterat
 
 5. **Access the Application**:
 
-   - ToVisit `http://localhost:5173` to use the web-based application.
+   - Visit `http://localhost:5173` to use the web-based application.
 
 6. **Access the Windows Form App**
 
