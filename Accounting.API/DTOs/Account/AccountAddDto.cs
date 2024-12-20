@@ -7,7 +7,4 @@ public class AccountAddDto : AccountBaseDto
 {
     [Required]
     public override AccountType? Type { get; set; }
-
-    [Required]
-    public override string? NickName { get; set; }
 }

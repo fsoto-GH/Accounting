@@ -1,5 +1,6 @@
-USE master
+--USE master
 
+GO
 DROP DATABASE IF EXISTS Accounting
 
 GO
@@ -18,6 +19,7 @@ CREATE TABLE Persons
 	CONSTRAINT PK_Persons_PersonID PRIMARY KEY CLUSTERED (PersonID)
 )
 
+GO
 CREATE TABLE AccountTypes (
 	AccountTypeID int IDENTITY(1, 1) NOT NULL,
 	Name varchar(20) NOT NULL,
@@ -37,6 +39,7 @@ CREATE TABLE Accounts
 	CONSTRAINT FK_Accounts_AccountType FOREIGN KEY (AccountTypeID) REFERENCES AccountTypes(AccountTypeID),
 )
 
+GO
 CREATE TABLE TransactionTypes
 (
 	TransactionTypeID int IDENTITY(1, 1) NOT NULL,
@@ -58,11 +61,11 @@ CREATE TABLE Transactions
 	CONSTRAINT FK_Transactions_TransactionType FOREIGN KEY (TransactionTypeID) REFERENCES TransactionTypes(TransactionTypeID)
 )
 
+GO
 INSERT INTO AccountTypes (Name)
 VALUES ('CHECKING'), ('SAVINGS')
 
+GO
 INSERT INTO TransactionTypes (Name)
 VALUES ('CREDIT'), ('DEBIT')
 
-GO
-USE master

@@ -1,0 +1,58 @@
+.summaryComponent {
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+
+    
+    .table {
+        --description-width: 65%;
+        --amount-width: 25%;
+        width: 100%;
+
+        border-collapse: collapse; 
+        background-color: #25252b;
+        height: fit-content;
+    
+        tr:first-child {
+            background-color: #242121;
+        }
+
+        tr:not(:first-child){
+            color: #cac1c1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2e2e36;
+        }
+
+        tr:last-child {
+            font-weight: bold;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 110%;
+        }
+
+        td {
+            vertical-align: top;
+            text-align: left;
+
+            span {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.alignRight {
+    text-align: right !important;
+}
+
+.floatRight {
+    float: right;
+}

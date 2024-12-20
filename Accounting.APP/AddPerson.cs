@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 
 namespace Accounting.APP;
 
@@ -17,10 +9,10 @@ public partial class AddPerson : Form
     public AddPerson()
     {
         InitializeComponent();
-        Person = new Person();
+        Person = new();
     }
 
-    private void txtLastName_Validating(object sender, CancelEventArgs e)
+    private void TxtLastName_Validating(object sender, CancelEventArgs e)
     {
         if (string.IsNullOrEmpty(txtLastName.Text.Trim()))
         {
@@ -32,7 +24,7 @@ public partial class AddPerson : Form
         }
     }
 
-    private void txtFirstName_Validating(object sender, CancelEventArgs e)
+    private void TxtFirstName_Validating(object sender, CancelEventArgs e)
     {
         if (string.IsNullOrEmpty(txtFirstName.Text.Trim()))
         {
@@ -45,7 +37,7 @@ public partial class AddPerson : Form
         }
     }
 
-    private void btnAdd_Click(object sender, EventArgs e)
+    private void BtnAdd_Click(object sender, EventArgs e)
     {
         if (ValidateChildren())
         {

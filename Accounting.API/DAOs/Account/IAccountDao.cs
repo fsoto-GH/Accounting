@@ -9,7 +9,7 @@ public interface IAccountDao
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="account"></param>
-    public Task<AccountDto> AddAsync(int personID, AccountAddDto account);
+    public Task<AccountDto?> AddAsync(int personID, AccountAddDto account);
 
     /// <summary>
     /// Updates only the changed fields for the specified account.
@@ -17,14 +17,14 @@ public interface IAccountDao
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
     /// <param name="account"></param>
-    public Task<AccountDto> UpdateAsync(int personID, int accountID, AccountPatchDto account);
+    public Task<AccountDto?> UpdateAsync(int personID, int accountID, AccountPatchDto account);
 
     /// <summary>
     /// Gets the details for a specific account.
     /// </summary>
     /// <param name="personID"></param>
     /// <param name="accountID"></param>
-    public Task<AccountDto> GetAsync(int personID, int accountID);
+    public Task<AccountDto?> GetAsync(int personID, int accountID);
 
     /// <summary>
     /// Gets all the existing accounts for a specific user.

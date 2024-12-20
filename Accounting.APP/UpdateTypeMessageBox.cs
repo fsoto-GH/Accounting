@@ -10,7 +10,7 @@ public partial class UpdateTypeMessageBox : Form
     public UpdateTypeMessageBox(TransactionType type)
     {
         InitializeComponent();
-        List<ComboBoxItem<TransactionType>> ls = new();
+        List<ComboBoxItem<TransactionType>> ls = [];
         foreach(TransactionType tt in Enum.GetValues(typeof(TransactionType)))
         {
             ls.Add(new ComboBoxItem<TransactionType>
@@ -27,14 +27,18 @@ public partial class UpdateTypeMessageBox : Form
         cbType.SelectedItem = ls.Where(x => x.Value == type).First();
     }
 
-    private void btnOK_Click(object sender, EventArgs e)
+    private void BtnOK_Click(object sender, EventArgs e)
     {
-        var type = (ComboBoxItem<TransactionType>)cbType.SelectedItem;
-        Type = type.Value;
-        DialogResult = DialogResult.OK;
+        var type = (ComboBoxItem<TransactionType>?)cbType.SelectedItem;
+
+        if (type is not null)
+        {
+            Type = type.Value;
+            DialogResult = DialogResult.OK;
+        }
     }
 
-    private void btnCancel_Click(object sender, EventArgs e)
+    private void BtnCancel_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.Cancel;
     }

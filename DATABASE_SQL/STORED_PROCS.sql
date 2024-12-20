@@ -79,7 +79,6 @@ BEGIN
 			@netBalance = ISNULL(SUM(CASE T.TransactionTypeID WHEN @debitTypeID THEN -AMOUNT ELSE AMOUNT END), 0)
 		FROM
 			Accounts A JOIN Transactions T ON A.AccountID = T.AccountID
-			INNER JOIN TransactionTypes TT ON T.TransactionTypeID = TT.TransactionTypeID
 		WHERE
 			A.AccountID = @accountID
 	END

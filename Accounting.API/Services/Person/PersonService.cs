@@ -5,24 +5,14 @@ using Accounting.API.Exceptions.Person;
 
 namespace Accounting.API.Services.Person
 {
-    public class PersonService : IPersonService
+    public class PersonService(IPersonDao personDao, IAccountDao accountDao) : IPersonService
     {
-        private readonly IPersonDao _personDao;
-        private readonly IAccountDao _accountDao;
-
-        public PersonService(IPersonDao personDao, IAccountDao accountDao)
-        {
-            _personDao = personDao ?? throw new ArgumentException("IPersonDao is null.");
-            _accountDao = accountDao ?? throw new ArgumentException("IAccountDao is null.");
-        }
+        private readonly IPersonDao _personDao = personDao ?? throw new ArgumentException("IPersonDao is null.");
+        private readonly IAccountDao _accountDao = accountDao ?? throw new ArgumentException("IAccountDao is null.");
 
         public async Task<PersonDto?> GetAsync(int personID)
         {
-            var person = await _personDao.GetAsync(personID);
-
-            if (person is null)
-                throw new NotFoundPersonException(personID);
-
+            var person = await _personDao.GetAsync(personID) ?? throw new NotFoundPersonException(personID);
             return person;
         }
 
@@ -42,10 +32,7 @@ namespace Accounting.API.Services.Person
 
         public async Task<PersonDto?> UpdateAsync(int personID, PersonPatchDto personPatchDto)
         {
-            var person = await _personDao.GetAsync(personID);
-            if (person is null)
-                throw new NotFoundPersonException(personID);
-
+            _ = await _personDao.GetAsync(personID) ?? throw new NotFoundPersonException(personID);
             personPatchDto.TrimNames();
             if (personPatchDto.FirstName?.Length == 0)
                 throw new InvalidPersonUpdateException($"First name cannot be empty.");
@@ -57,17 +44,10 @@ namespace Accounting.API.Services.Person
 
         public async Task<bool> DeleteAsync(int personID, bool forceDelete = false)
         {
-            var person = await _personDao.GetAsync(personID);
-
-            if (person is null)
-                throw new NotFoundPersonException(personID);
-
+            _ = await _personDao.GetAsync(personID) ?? throw new NotFoundPersonException(personID);
             var personAccounts = await _accountDao.GetAllAsync(personID);
-
             if (personAccounts.NetBalace != 0 && !forceDelete)
-            {
                 throw new InvalidPersonDeletionException($"Person ({personID}) has a non-zero balance.");
-            }
 
             return await _personDao.DeleteAsync(personID);
         }

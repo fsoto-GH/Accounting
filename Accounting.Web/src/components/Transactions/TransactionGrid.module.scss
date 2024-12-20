@@ -1,0 +1,91 @@
+.rounded {
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    height: fit-content;
+
+    .table {
+        --description-width: 60%;
+        --amount-width: 25%;
+
+        border-collapse: collapse; 
+        background-color: #25252b;
+        height: fit-content;
+
+        tr:first-child {
+            background-color: #242121;
+        }
+
+        tr:not(:first-child){
+            color: #cac1c1;
+        }
+
+        tr:not(:first-child):not(.noData):hover {
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2e2e36;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 110%;
+        }
+
+        td {
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .date {
+            width: calc(100% - var(--amount-width) - var(--description-width));
+            
+        }
+
+        .dateEdit {
+            background: none!important;
+            border: none;
+            font-size: inherit;
+            font-family: inherit;
+            text-decoration: underline;
+            margin-left: 0;
+            padding-left: 0;
+            color: inherit;
+            cursor: pointer;
+        }
+        
+        .description {
+            width: var(--description-width);
+        }
+
+        .amount {
+            width: var(--amount-width);
+        }
+    }
+}
+
+.alignRight {
+    text-align: right !important;
+}
+
+.right {
+    float: right
+}
+
+.validInput {
+    background-color: transparent;
+    color: inherit;
+    font-size: inherit;
+    border-color: transparent;
+}
+
+.validation {
+    color: red;
+    font-size: .7rem;
+    display: block;
+}

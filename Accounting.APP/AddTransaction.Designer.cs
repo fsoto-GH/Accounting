@@ -84,7 +84,7 @@
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(211, 20);
             this.txtAmount.TabIndex = 3;
-            this.txtAmount.Validating += new System.ComponentModel.CancelEventHandler(this.txtAmount_Validating);
+            this.txtAmount.Validating += new System.ComponentModel.CancelEventHandler(this.TxtAmount_Validating);
             // 
             // cbType
             // 
@@ -106,7 +106,7 @@
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "Add";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
             // btnCancel
             // 
@@ -117,7 +117,7 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // errorProvider
             // 

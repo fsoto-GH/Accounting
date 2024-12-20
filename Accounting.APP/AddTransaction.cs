@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 
 namespace Accounting
 {
@@ -14,7 +12,7 @@ namespace Accounting
             InitializeComponent();
         }
 
-        private void txtAmount_Validating(object sender, CancelEventArgs e)
+        private void TxtAmount_Validating(object sender, CancelEventArgs e)
         {
             if (decimal.TryParse(txtAmount.Text.Trim(), out decimal amount))
             {
@@ -29,7 +27,7 @@ namespace Accounting
             }
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void BtnOK_Click(object sender, EventArgs e)
         {
             if (ValidateChildren())
             {
@@ -45,7 +43,7 @@ namespace Accounting
             cbType.SelectedIndex = 0;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }

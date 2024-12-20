@@ -4,28 +4,25 @@ using Accounting.API.Exceptions.Transaction;
 using Accounting.API.Services.Transaction;
 using Accounting.API.DTOs.Transaction;
 using Microsoft.AspNetCore.Mvc;
+using Accounting.API.Controllers.QueryParamaters;
 
 namespace Accounting.API.Controllers
 {
     [ApiController]
     [Route("v1/Persons/{personID:int}/Accounts/{accountID:int}/Transactions")]
-    public class TransactionController : Controller
+    public class TransactionController(ITransactionService transactionService) : Controller
     {
-        private readonly ITransactionService _transactionService;
-        public TransactionController(ITransactionService transactionService)
-        {
-            _transactionService = transactionService;
-        }
+        private readonly ITransactionService _transactionService = transactionService;
 
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllAsync(int personID, int accountID)
+        public async Task<IActionResult> GetAllAsync(int personID, int accountID, [FromQuery]TransactionQueryParameters queryParameters)
         {
             try
             {
-                return Ok(await _transactionService.GetAllAsync(personID, accountID));
+                return Ok(await _transactionService.GetAllAsync(personID, accountID, queryParameters));
             }
             catch (NotFoundPersonException e)
             {
@@ -66,7 +63,7 @@ namespace Accounting.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TransactionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddAsync(int personID, int accountID, TransactionAddDto transactionAddDto)
+        public async Task<IActionResult> AddAsync(int personID, int accountID, [FromBody] TransactionAddDto transactionAddDto)
         {
             try
             {
@@ -91,7 +88,7 @@ namespace Accounting.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TransactionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transactionPatchDto)
+        public async Task<IActionResult> UpdateAsync(int personID, int accountID, int transactionID, [FromBody] TransactionPatchDto transactionPatchDto)
         {
             try
             {

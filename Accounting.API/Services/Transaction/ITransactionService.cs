@@ -2,6 +2,7 @@
 using Accounting.API.Exceptions.Account;
 using Accounting.API.Exceptions.Transaction;
 using Accounting.API.DTOs.Transaction;
+using Accounting.API.Controllers.QueryParamaters;
 
 namespace Accounting.API.Services.Transaction
 {
@@ -27,7 +28,7 @@ namespace Accounting.API.Services.Transaction
         /// <returns></returns>
         /// <exception cref="NotFoundPersonException"></exception>
         /// <exception cref="NotFoundAccountException"></exception>
-        public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID);
+        public Task<AccountTransactionsDto> GetAllAsync(int personID, int accountID, TransactionQueryParameters nameQuery);
 
         /// <summary>
         /// Creates a transaction entry tied to the associated person account.
@@ -39,7 +40,7 @@ namespace Accounting.API.Services.Transaction
         /// <exception cref="InvalidTransactionAdditionException"></exception>
         /// <exception cref="NotFoundPersonException"></exception>
         /// <exception cref="NotFoundAccountException"></exception>
-        public Task<TransactionDto> AddAsync(int personID, int accountID, TransactionAddDto transaction);
+        public Task<TransactionDto?> AddAsync(int personID, int accountID, TransactionAddDto transaction);
 
         /// <summary>
         /// Updates the details of the specified transaction.
@@ -54,7 +55,7 @@ namespace Accounting.API.Services.Transaction
         /// <exception cref="InvalidAccountUpdateException"></exception>
         /// <exception cref="NotFoundTransactionException"></exception>
         /// <exception cref="InvalidTransactionUpdateException"></exception>
-        public Task<TransactionDto> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction);
+        public Task<TransactionDto?> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transaction);
 
         /// <summary>
         /// Deletes the transaction.
