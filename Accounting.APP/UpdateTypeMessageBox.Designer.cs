@@ -63,7 +63,7 @@ partial class UpdateTypeMessageBox
         this.btnCancel.TabIndex = 9;
         this.btnCancel.Text = "Cancel";
         this.btnCancel.UseVisualStyleBackColor = true;
-        this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+        this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
         // 
         // btnOK
         // 
@@ -73,7 +73,7 @@ partial class UpdateTypeMessageBox
         this.btnOK.TabIndex = 8;
         this.btnOK.Text = "Done";
         this.btnOK.UseVisualStyleBackColor = true;
-        this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+        this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
         // 
         // UpdateTypeMessageBox
         // 

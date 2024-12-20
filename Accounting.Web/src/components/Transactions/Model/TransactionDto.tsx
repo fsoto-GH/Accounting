@@ -1,5 +1,5 @@
 type TransactionDto = {
-  transactionID: number;
+  transactionID?: number;
   amount: number;
   description: string;
   type: number;

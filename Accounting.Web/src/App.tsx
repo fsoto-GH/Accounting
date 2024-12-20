@@ -262,9 +262,8 @@ function App() {
           id="btnAddAccount"
           key="btnAddAccount"
           className={styles.secondary}
-          onClick={() => {
-            setActiveDrawer("Account");
-          }}
+          onClick={() => setActiveDrawer("Account")}
+          disabled={!selectedPerson}
         >
           Add an Account
         </button>
@@ -367,7 +366,7 @@ function App() {
     ></SummaryComponent>
   );
 
-  function handleTransactionChange() {
+  function submitDrawerCallback() {
     doRefresh();
     setActiveDrawer(undefined);
   }
@@ -414,7 +413,7 @@ function App() {
             accountID={selectedAccount.accountID}
             personID={selectedPerson.personID}
             transactionID={selectedTransactionId ?? 0}
-            handleSubmit={handleTransactionChange}
+            handleSubmit={submitDrawerCallback}
             handleDrawerClose={() => setActiveDrawer(undefined)}
           ></TransactionDrawer>
         )}
@@ -424,8 +423,9 @@ function App() {
             headerText={`Add Account for ${selectedPerson.firstName}`}
             isOpen={activeDrawerName === "Account"}
             personID={selectedPerson.personID}
+            accountID={selectedAccount?.accountID}
             handleDrawerClose={() => setActiveDrawer(undefined)}
-            handleSubmit={handleTransactionChange}
+            handleSubmit={submitDrawerCallback}
           ></AccountDrawer>
         )}
       </div>

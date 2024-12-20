@@ -1,12 +1,10 @@
 ﻿using Accounting.API.Enums;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Accounting.APP;
 public partial class MainWindow : Form
 {
-    // for local dev
-    //private const string cxnStr = @"Data Source=(LocalDB)\MSSQLLocalDB; Initial Catalog=Accounting; Integrated Security=True; Persist Security Info=False";
     private readonly string cxnStr;
     private List<Person> people;
 
@@ -51,7 +49,7 @@ public partial class MainWindow : Form
         }
 
         cxnStr = cnnStrBuilder.ConnectionString;
-        people = new List<Person>();
+        people = [];
     }
 
     private void MainWindow_Load(object sender, EventArgs e)
@@ -63,7 +61,7 @@ public partial class MainWindow : Form
 
     private void RefreshPeople(int? indexToSelect = null)
     {
-        people = new List<Person>();
+        people = [];
         using (SqlConnection cxn = new(cxnStr))
         {
             try
@@ -116,7 +114,7 @@ public partial class MainWindow : Form
 
     private void RefreshAccounts(int? indexToSelect = null)
     {
-        List<Account> accs = new();
+        List<Account> accs = [];
         if (cbPeople.SelectedItem != null)
         {
             Person selected = (Person)cbPeople.SelectedItem;
@@ -217,12 +215,13 @@ public partial class MainWindow : Form
 
     private void RefreshTransactions()
     {
-        List<Transaction> trans = new();
+        List<Transaction> value = [];
+        List<Transaction> trans = value;
         if (lstbAccount.SelectedItem != null)
         {
             {
                 Account selectedAccount = (Account)lstbAccount.SelectedItem;
-                Person selectedPerson = (Person)cbPeople.SelectedItem;
+                Person selectedPerson = (Person)cbPeople.SelectedItem!;
                 using SqlConnection cxn = new(cxnStr);
                 try
                 {
@@ -308,7 +307,7 @@ public partial class MainWindow : Form
 
     private void BtnCloseAccount_Click(object sender, EventArgs e)
     {
-        DialogResult res = MessageBox.Show($"Close \"{((Account)lstbAccount.SelectedItem).NickName}\"?", "Close selected account?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        DialogResult res = MessageBox.Show($"Close \"{((Account?)lstbAccount.SelectedItem)!.NickName}\"?", "Close selected account?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
         if (res == DialogResult.Yes)
         {
@@ -398,7 +397,7 @@ public partial class MainWindow : Form
 
     private void BtnRenameAccount_Click(object sender, EventArgs e)
     {
-        Account selected = (Account)lstbAccount.SelectedItem;
+        Account selected = (Account?)lstbAccount.SelectedItem ?? throw new NullReferenceException("Account cannot be null.");
         UpdateTextBox update = new("Rename account", "Account Name: ", selected.NickName);
         if (update.ShowDialog() == DialogResult.OK)
         {
@@ -441,7 +440,7 @@ public partial class MainWindow : Form
 
     private void BtnAddAccount_Click(object sender, EventArgs e)
     {
-        Person selected = (Person)cbPeople.SelectedItem;
+        Person selected = (Person?)cbPeople.SelectedItem ?? throw new NullReferenceException("Person cannot be null.");
         AddAccount add = new();
         if (add.ShowDialog() == DialogResult.OK)
         {
@@ -484,7 +483,7 @@ public partial class MainWindow : Form
 
     private void BtnAddTrans_Click(object sender, EventArgs e)
     {
-        Account selected = (Account)lstbAccount.SelectedItem;
+        Account selected = (Account?)lstbAccount.SelectedItem ?? throw new NullReferenceException("Account cannot be null.");
         AddTransaction add = new();
 
         if (add.ShowDialog() == DialogResult.OK)
@@ -531,7 +530,7 @@ public partial class MainWindow : Form
 
     private void BtnChangeAmount_Click(object sender, EventArgs e)
     {
-        Transaction selected = (Transaction)lstbTransactions.SelectedItem;
+        Transaction selected = (Transaction?)lstbTransactions.SelectedItem ?? throw new NullReferenceException("Transaction cannot be null.");
         UpdateAmount update = new("Change transaction amount", "Transaction amount: ", selected.Amount.ToString("N2"));
         if (update.ShowDialog() == DialogResult.OK)
         {
@@ -568,7 +567,7 @@ public partial class MainWindow : Form
 
     private void BtnEditDesc_Click(object sender, EventArgs e)
     {
-        Transaction selected = (Transaction)lstbTransactions.SelectedItem;
+        Transaction selected = (Transaction?)lstbTransactions.SelectedItem ?? throw new NullReferenceException("Transaction cannot be null.");
         UpdateTextBox update = new("Rename transaction", "Transaction Name: ", selected.Description);
         if (update.ShowDialog() == DialogResult.OK)
         {
@@ -611,7 +610,8 @@ public partial class MainWindow : Form
 
     private void BtnChangeType_Click(object sender, EventArgs e)
     {
-        Transaction selected = (Transaction)lstbTransactions.SelectedItem;
+        Transaction selected = (Transaction?)lstbTransactions.SelectedItem ?? throw new NullReferenceException("Transaction can not be null.");            
+
         UpdateTypeMessageBox update = new(selected.Type);
 
         if (update.ShowDialog() == DialogResult.OK)

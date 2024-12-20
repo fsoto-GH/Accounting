@@ -63,7 +63,7 @@ namespace Accounting.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TransactionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddAsync(int personID, int accountID, TransactionAddDto transactionAddDto)
+        public async Task<IActionResult> AddAsync(int personID, int accountID, [FromBody] TransactionAddDto transactionAddDto)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Accounting.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TransactionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateAsync(int personID, int accountID, int transactionID, TransactionPatchDto transactionPatchDto)
+        public async Task<IActionResult> UpdateAsync(int personID, int accountID, int transactionID, [FromBody] TransactionPatchDto transactionPatchDto)
         {
             try
             {

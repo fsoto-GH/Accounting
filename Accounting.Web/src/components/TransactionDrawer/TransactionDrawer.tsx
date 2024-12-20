@@ -35,8 +35,9 @@ function TransactionDrawer({
     transactionID: 0,
     type: 0,
   });
+
   // PATCH Transaction
-  async function handleTransactionChange(
+  async function handleTransactionSubmit(
     transaction: TransactionDto
   ): Promise<Transaction> {
     const res = await fetch(
@@ -94,7 +95,7 @@ function TransactionDrawer({
 
     if (validatedAmount === undefined) return;
 
-    handleTransactionChange({
+    handleTransactionSubmit({
       amount: Math.abs(validatedAmount * 100),
       transactionID: transactionID,
       description: formData.description,
@@ -185,6 +186,7 @@ function TransactionDrawer({
             Description:
           </label>
           <textarea
+            id="description"
             name="description"
             maxLength={200}
             value={formData?.description}
@@ -197,6 +199,7 @@ function TransactionDrawer({
           </label>
           <div className={styles.transactionAmount}>
             <input
+              id="amount"
               name="amount"
               type="text"
               value={formData?.amount}
