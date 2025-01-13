@@ -8,10 +8,7 @@
     <AssemblyName>Accounting</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Accounting.API\Accounting.API.csproj" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

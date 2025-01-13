@@ -1,5 +1,5 @@
-﻿using Accounting.API.Enums;
-using Accounting.APP;
+﻿using Accounting.APP;
+using Accounting.APP.Enums;
 
 namespace Accounting;
 
@@ -28,8 +28,8 @@ public partial class AddAccount : Form
     private void BtnOK_Click(object sender, EventArgs e)
     {
         NickName = string.IsNullOrEmpty(txtNickName.Text) ? string.Empty: txtNickName.Text.Trim();
-        var type = (ComboBoxItem<AccountType>)cbType.SelectedItem;
-        Type = type.Value;
+        var type = cbType.SelectedItem as ComboBoxItem<AccountType>;
+        Type = type!.Value;
         DialogResult = DialogResult.OK;
     }
 
