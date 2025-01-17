@@ -54,9 +54,9 @@ This project is still a part of my daily workflow, and I’m continuously iterat
 2. **Set Up Database**:
 
    - Run the following scripts in the **Accounting/DATABASE_SQL** folder to generate the database on your local machine:
-     - `CREATE_DB.sql`
-     - `STORED_PROCS.sql`
-     - `TRIGGERS.sql`
+     - [`CREATE_DB.sql`](DATABASE_SQL/CREATE_DB.sql)
+     - [`STORED_PROCS.sql`](DATABASE_SQL/STORED_PROCS.sql)
+     - [`TRIGGERS.sql`](DATABASE_SQL/TRIGGERS.sql)
    - Ensure the SQL Server is running and the connection string is updated in the `appsettings.json` file.
 
 3. **Run the API**:
