@@ -94,7 +94,7 @@ This project is still a part of my daily workflow, and I’m continuously iterat
 
 ![A screenshot of the Windows Form application that became the first extension to this project.](readme/pics/app_view.png)
 
-![A screenshot of the Windows Form application that became the first extension to this project.](readme/pics/web_view.png)
+![A screenshot of the React-based web implementation of this project.](readme/pics/web_view.png)
 
 ## **Contributing**
 
